@@ -1,0 +1,24 @@
+from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
+from .views import (
+    RegisterView, LoginView, UserProfileView, UserListView, UserDetailView,
+    NextOfKinCreateView, NextOfKinDetailView
+)
+
+urlpatterns = [
+    # Authentication
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # User profile
+    path('profile/', UserProfileView.as_view(), name='user-profile'),
+    
+    # User management (admin)
+    path('users/', UserListView.as_view(), name='user-list'),
+    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    
+    # Next of Kin
+    path('next-of-kin/', NextOfKinCreateView.as_view(), name='next-of-kin-create'),
+    path('next-of-kin/<int:pk>/', NextOfKinDetailView.as_view(), name='next-of-kin-detail'),
+]

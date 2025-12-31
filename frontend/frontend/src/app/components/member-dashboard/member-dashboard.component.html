@@ -1,0 +1,94 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Welcome, {{ currentUser?.first_name }}!</h1>
+    <button mat-raised-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- Balances Section -->
+    <div class="balances-section">
+      <h2>Your Balances</h2>
+      <div class="balance-cards">
+        @for (balance of balances; track balance.contribution_type) {
+          <mat-card class="balance-card">
+            <mat-card-header>
+              <mat-card-title>{{ balance.contribution_type }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="balance-amount">KES {{ balance.total_balance }}</div>
+              @if (balance.last_contribution_date) {
+                <div class="last-contribution">
+                  Last contribution: {{ balance.last_contribution_date | date }}
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+        @empty {
+          <p>No balance information available</p>
+        }
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" routerLink="/member/submit-contribution">
+          <mat-icon>add</mat-icon> Submit Contribution
+        </button>
+        <button mat-raised-button color="accent" routerLink="/member/contributions">
+          <mat-icon>list</mat-icon> View All Contributions
+        </button>
+        <button mat-raised-button routerLink="/member/profile">
+          <mat-icon>person</mat-icon> Manage Profile
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Contributions -->
+    <div class="recent-contributions">
+      <h2>Recent Contributions</h2>
+      @if (recentContributions.length > 0) {
+        <table mat-table [dataSource]="recentContributions" class="contributions-table">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let contribution">
+              {{ contribution.submitted_at | date:'short' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let contribution">
+              {{ contribution.contribution_type_name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let contribution">
+              KES {{ contribution.amount }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let contribution">
+              <mat-chip [color]="getStatusColor(contribution.status)">
+                {{ contribution.status }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      } @else {
+        <p>No contributions yet</p>
+      }
+    </div>
+  </div>
+</div>

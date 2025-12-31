@@ -1,0 +1,101 @@
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+
+  h1 {
+    margin: 0;
+    color: #333;
+  }
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.balances-section {
+  h2 {
+    margin-bottom: 16px;
+    color: #555;
+  }
+}
+
+.balance-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.balance-card {
+  .balance-amount {
+    font-size: 32px;
+    font-weight: bold;
+    color: #667eea;
+    margin: 16px 0;
+  }
+
+  .last-contribution {
+    font-size: 12px;
+    color: #999;
+  }
+}
+
+.quick-actions {
+  h2 {
+    margin-bottom: 16px;
+    color: #555;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.recent-contributions {
+  h2 {
+    margin-bottom: 16px;
+    color: #555;
+  }
+}
+
+.contributions-table {
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .balance-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}
