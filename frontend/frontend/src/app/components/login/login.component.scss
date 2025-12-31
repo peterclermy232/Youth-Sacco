@@ -1,30 +1,168 @@
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.login-wrapper {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  padding: 2rem;
+}
+
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  width: 100%;
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-in-out;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.login-branding {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+  }
+
+  @media (max-width: 968px) {
+    padding: 2rem;
+  }
+}
+
+.branding-content {
+  position: relative;
+  z-index: 1;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .logo-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: white;
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.tagline {
+  text-align: center;
+  font-size: 1.125rem;
+  opacity: 0.95;
+  margin-bottom: 3rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+
+  mat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    backdrop-filter: blur(10px);
+  }
+}
+
+.login-form-section {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (max-width: 968px) {
+    padding: 2rem;
+  }
 }
 
 .login-card {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-.full-width {
-  width: 100%;
-  margin-bottom: 16px;
+.card-header {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
 }
 
-.register-link {
-  text-align: center;
-  margin-top: 16px;
+mat-card-content {
+  padding: 0 !important;
+}
 
-  a {
-    color: #667eea;
+.mat-mdc-form-field {
+  margin-bottom: 1rem;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  .forgot-link {
+    color: var(--primary-color);
     text-decoration: none;
+    font-size: 0.875rem;
     font-weight: 500;
 
     &:hover {
@@ -33,7 +171,63 @@
   }
 }
 
-button[type="submit"] {
-  margin-top: 8px;
+.login-button {
+  width: 100%;
   height: 48px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  .button-spinner {
+    margin-right: 0.5rem;
+  }
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 2rem 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  span {
+    position: relative;
+    background: white;
+    padding: 0 1rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+}
+
+.register-section {
+  text-align: center;
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .register-button {
+    width: 100%;
+    height: 48px;
+  }
+}
+
+.footer-text {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
 }

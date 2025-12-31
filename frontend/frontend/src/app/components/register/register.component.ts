@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,13 +18,16 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     RouterModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule,
+    MatCheckboxModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
@@ -30,6 +35,9 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   registerForm: FormGroup;
   loading = false;
+  hidePassword = true;
+  hideConfirmPassword = true;
+  acceptTerms = false;
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +69,11 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.markFormGroupTouched(this.registerForm);
+      return;
+    }
+
+    if (!this.acceptTerms) {
+      this.snackBar.open('Please accept the terms and conditions', 'Close', { duration: 3000 });
       return;
     }
 

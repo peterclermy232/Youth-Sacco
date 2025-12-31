@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../services/auth.service';
 import { ContributionService } from '../../services/contribution.service';
 import { DashboardStats, Contribution } from '../../models/contribution.model';
@@ -22,7 +24,9 @@ import { DashboardStats, Contribution } from '../../models/contribution.model';
     MatIconModule,
     MatTableModule,
     MatChipsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule,
+    MatDividerModule
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']

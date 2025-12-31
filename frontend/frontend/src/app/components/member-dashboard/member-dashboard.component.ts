@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth.service';
 import { ContributionService } from '../../services/contribution.service';
 import { User } from '../../models/user.model';
 import { Balance, Contribution } from '../../models/contribution.model';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-member-dashboard',
@@ -21,7 +23,9 @@ import { Balance, Contribution } from '../../models/contribution.model';
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDividerModule,
+    MatMenuModule
   ],
   templateUrl: './member-dashboard.component.html',
   styleUrls: ['./member-dashboard.component.scss']

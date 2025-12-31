@@ -1,122 +1,254 @@
-<div class="admin-container">
-  <div class="admin-header">
-    <h1>Admin Dashboard</h1>
-    <button mat-raised-button color="warn" (click)="logout()">
-      <mat-icon>logout</mat-icon> Logout
-    </button>
-  </div>
+<div class="dashboard-wrapper">
+  <!-- Top Navigation Bar -->
+  <nav class="top-navbar">
+    <div class="navbar-content">
+      <div class="navbar-left">
+        <div class="logo-section">
+          <mat-icon class="logo-icon">account_balance</mat-icon>
+          <span class="logo-text">SACCO Admin</span>
+        </div>
+      </div>
 
-  @if (stats) {
-    <div class="stats-grid">
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon>group</mat-icon>
-          </div>
-          <div class="stat-value">{{ stats.total_members }}</div>
-          <div class="stat-label">Total Members</div>
-        </mat-card-content>
-      </mat-card>
+      <div class="navbar-right">
+        <button mat-icon-button class="notification-button">
+          <mat-icon [matBadge]="stats?.pending_contributions || 0" matBadgeColor="warn">notifications</mat-icon>
+        </button>
 
-      <mat-card class="stat-card pending">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon [matBadge]="stats.pending_contributions" matBadgeColor="warn">pending</mat-icon>
-          </div>
-          <div class="stat-value">{{ stats.pending_contributions }}</div>
-          <div class="stat-label">Pending Verifications</div>
-        </mat-card-content>
-      </mat-card>
-
-      @for (summary of stats.contribution_summaries; track summary.id) {
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <div class="stat-icon">
-              <mat-icon>account_balance</mat-icon>
+        <div class="user-menu">
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+            <div class="avatar">
+              <mat-icon>person</mat-icon>
             </div>
-            <div class="stat-value">KES {{ summary.total_amount }}</div>
-            <div class="stat-label">{{ summary.contribution_type_name }} Total</div>
-            <div class="stat-detail">{{ summary.total_contributions }} contributions</div>
-          </mat-card-content>
-        </mat-card>
-      }
-    </div>
-  }
-
-  <div class="pending-section">
-    <h2>Pending Contributions</h2>
-    @if (pendingContributions.length > 0) {
-      <table mat-table [dataSource]="pendingContributions" class="pending-table">
-        <ng-container matColumnDef="member">
-          <th mat-header-cell *matHeaderCellDef>Member</th>
-          <td mat-cell *matCellDef="let contribution">
-            {{ contribution.member_details?.first_name }} {{ contribution.member_details?.last_name }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Type</th>
-          <td mat-cell *matCellDef="let contribution">
-            {{ contribution.contribution_type_name }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Amount</th>
-          <td mat-cell *matCellDef="let contribution">
-            KES {{ contribution.amount }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="transaction">
-          <th mat-header-cell *matHeaderCellDef>M-Pesa Code</th>
-          <td mat-cell *matCellDef="let contribution">
-            {{ contribution.mpesa_transaction_code }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Submitted</th>
-          <td mat-cell *matCellDef="let contribution">
-            {{ contribution.submitted_at | date:'short' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let contribution">
-            <button mat-raised-button color="primary" (click)="verifyContribution(contribution.id)">
-              Verify
+            <span class="user-name">Admin</span>
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
             </button>
-          </td>
-        </ng-container>
+            <button mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>Settings</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    } @else {
-      <mat-card>
-        <mat-card-content>
-          <p>No pending contributions</p>
-        </mat-card-content>
-      </mat-card>
-    }
-  </div>
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <div class="content-container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Dashboard Overview</h1>
+          <p>Monitor your SACCO's performance and manage contributions</p>
+        </div>
+        <button mat-raised-button color="primary" class="header-action">
+          <mat-icon>add</mat-icon>
+          Quick Actions
+        </button>
+      </div>
 
-  <div class="quick-actions">
-    <h2>Quick Actions</h2>
-    <div class="action-buttons">
-      <button mat-raised-button color="primary" routerLink="/admin/members">
-        <mat-icon>group</mat-icon> View All Members
-      </button>
-      <button mat-raised-button color="accent" routerLink="/admin/contributions">
-        <mat-icon>list</mat-icon> All Contributions
-      </button>
-      <button mat-raised-button routerLink="/admin/balances">
-        <mat-icon>account_balance_wallet</mat-icon> Member Balances
-      </button>
+      <!-- Stats Grid -->
+      @if (stats) {
+        <div class="stats-grid">
+          <mat-card class="stat-card primary-card">
+            <div class="stat-content">
+              <div class="stat-icon-wrapper primary">
+                <mat-icon>group</mat-icon>
+              </div>
+              <div class="stat-details">
+                <div class="stat-value">{{ stats.total_members }}</div>
+                <div class="stat-label">Total Members</div>
+                <div class="stat-change positive">
+                  <mat-icon>trending_up</mat-icon>
+                  <span>12% from last month</span>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+
+          <mat-card class="stat-card warning-card">
+            <div class="stat-content">
+              <div class="stat-icon-wrapper warning">
+                <mat-icon>pending_actions</mat-icon>
+              </div>
+              <div class="stat-details">
+                <div class="stat-value">{{ stats.pending_contributions }}</div>
+                <div class="stat-label">Pending Verifications</div>
+                <div class="stat-change">
+                  <mat-icon>schedule</mat-icon>
+                  <span>Requires attention</span>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+
+          @for (summary of stats.contribution_summaries; track summary.id) {
+            <mat-card class="stat-card success-card">
+              <div class="stat-content">
+                <div class="stat-icon-wrapper success">
+                  <mat-icon>account_balance_wallet</mat-icon>
+                </div>
+                <div class="stat-details">
+                  <div class="stat-value">KES {{ summary.total_amount | number:'1.0-0' }}</div>
+                  <div class="stat-label">{{ summary.contribution_type_name }} Total</div>
+                  <div class="stat-meta">
+                    <span>{{ summary.total_contributions }} contributions</span>
+                    <span class="dot">•</span>
+                    <span>{{ summary.active_members }} active</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          }
+        </div>
+      }
+
+      <!-- Pending Contributions Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <div>
+            <h2>Pending Contributions</h2>
+            <p>Review and verify member contributions</p>
+          </div>
+          @if (pendingContributions.length > 0) {
+            <mat-chip class="count-chip">{{ pendingContributions.length }} pending</mat-chip>
+          }
+        </div>
+
+        <mat-card class="table-card">
+          @if (pendingContributions.length > 0) {
+            <div class="table-wrapper">
+              <table mat-table [dataSource]="pendingContributions" class="modern-table">
+                <ng-container matColumnDef="member">
+                  <th mat-header-cell *matHeaderCellDef>Member</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <div class="member-cell">
+                      <div class="member-avatar">
+                        {{ contribution.member_details?.first_name?.[0] }}{{ contribution.member_details?.last_name?.[0] }}
+                      </div>
+                      <div class="member-info">
+                        <div class="member-name">
+                          {{ contribution.member_details?.first_name }} {{ contribution.member_details?.last_name }}
+                        </div>
+                        <div class="member-phone">{{ contribution.member_details?.phone_number }}</div>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef>Type</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <mat-chip class="type-chip">{{ contribution.contribution_type_name }}</mat-chip>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                  <th mat-header-cell *matHeaderCellDef>Amount</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <div class="amount-cell">
+                      KES {{ contribution.amount | number:'1.2-2' }}
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="transaction">
+                  <th mat-header-cell *matHeaderCellDef>M-Pesa Code</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <code class="transaction-code">{{ contribution.mpesa_transaction_code }}</code>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef>Submitted</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <div class="date-cell">
+                      <div>{{ contribution.submitted_at | date:'MMM d, y' }}</div>
+                      <div class="time">{{ contribution.submitted_at | date:'shortTime' }}</div>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let contribution">
+                    <button mat-raised-button color="primary" (click)="verifyContribution(contribution.id)" class="action-button">
+                      <mat-icon>verified</mat-icon>
+                      Verify
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+              </table>
+            </div>
+          } @else {
+            <div class="empty-state">
+              <div class="empty-icon">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <h3>All caught up!</h3>
+              <p>There are no pending contributions to review</p>
+            </div>
+          }
+        </mat-card>
+      </div>
+
+      <!-- Quick Actions Grid -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2>Quick Actions</h2>
+        </div>
+
+        <div class="quick-actions-grid">
+          <mat-card class="action-card" routerLink="/admin/members">
+            <div class="action-icon blue">
+              <mat-icon>group</mat-icon>
+            </div>
+            <h3>View Members</h3>
+            <p>Manage all SACCO members</p>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/admin/contributions">
+            <div class="action-icon purple">
+              <mat-icon>receipt_long</mat-icon>
+            </div>
+            <h3>All Contributions</h3>
+            <p>View contribution history</p>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/admin/balances">
+            <div class="action-icon green">
+              <mat-icon>account_balance_wallet</mat-icon>
+            </div>
+            <h3>Member Balances</h3>
+            <p>Check individual balances</p>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card">
+            <div class="action-icon orange">
+              <mat-icon>analytics</mat-icon>
+            </div>
+            <h3>Reports</h3>
+            <p>Generate financial reports</p>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          </mat-card>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-
