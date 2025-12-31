@@ -10,7 +10,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Redirect to login page with return url
   router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };
@@ -23,7 +22,6 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Redirect to member dashboard if not admin
   router.navigate(['/member']);
   return false;
 };
@@ -36,7 +34,6 @@ export const memberGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Redirect to admin dashboard if admin
   if (authService.isAdmin) {
     router.navigate(['/admin']);
   } else {

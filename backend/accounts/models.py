@@ -1,145 +1,103 @@
 from django.db import models
-from django.conf import settings
-from django.core.validators import MinValueValidator
-from decimal import Decimal
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.validators import RegexValidator
 
 
-class ContributionType(models.Model):
-    """Types of contributions (SACCO, MMF, etc.)"""
+class UserManager(BaseUserManager):
+    """Custom user manager for phone number authentication"""
     
-    name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    def create_user(self, phone_number, password=None, **extra_fields):
+        if not phone_number:
+            raise ValueError('Phone number is required')
+        
+        user = self.model(phone_number=phone_number, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
     
-    class Meta:
-        db_table = 'contribution_types'
-        verbose_name = 'Contribution Type'
-        verbose_name_plural = 'Contribution Types'
-    
-    def __str__(self):
-        return self.name
+    def create_superuser(self, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('role', 'ADMIN')
+        
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True')
+        
+        return self.create_user(phone_number, password, **extra_fields)
 
 
-class Contribution(models.Model):
-    """Member contributions with M-Pesa transaction details"""
+class User(AbstractBaseUser, PermissionsMixin):
+    """Custom user model using phone number for authentication"""
     
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending Verification'),
-        ('VERIFIED', 'Verified'),
-        ('REJECTED', 'Rejected'),
+    ROLE_CHOICES = [
+        ('ADMIN', 'Admin'),
+        ('MEMBER', 'Member'),
     ]
     
-    member = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='contributions'
-    )
-    contribution_type = models.ForeignKey(
-        ContributionType,
-        on_delete=models.PROTECT,
-        related_name='contributions'
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$',
+        message="Phone number must be in format: '+254712345678'"
     )
     
-    amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))]
+    phone_number = models.CharField(
+        validators=[phone_regex],
+        max_length=17,
+        unique=True
     )
-    mpesa_transaction_code = models.CharField(max_length=20, unique=True)
-    mpesa_phone_number = models.CharField(max_length=15)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, null=True)
     
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='MEMBER')
     
-    # Verification details
-    verified_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='verified_contributions'
-    )
-    verified_at = models.DateTimeField(null=True, blank=True)
-    rejection_reason = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     
-    # Timestamps
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
     
-    # Additional metadata
-    notes = models.TextField(blank=True, null=True)
+    objects = UserManager()
+    
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
     
     class Meta:
-        db_table = 'contributions'
-        verbose_name = 'Contribution'
-        verbose_name_plural = 'Contributions'
-        ordering = ['-submitted_at']
-        indexes = [
-            models.Index(fields=['member', '-submitted_at']),
-            models.Index(fields=['status', '-submitted_at']),
-            models.Index(fields=['mpesa_transaction_code']),
-        ]
+        db_table = 'users'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
     
     def __str__(self):
-        return f"{self.member.full_name} - {self.contribution_type.name} - KES {self.amount}"
-
-
-class SACCOBalance(models.Model):
-    """Track SACCO and MMF balances for each member"""
+        return f"{self.first_name} {self.last_name} ({self.phone_number})"
     
-    member = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class NextOfKin(models.Model):
+    """Next of Kin details for members"""
+    
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
-        related_name='sacco_balance'
-    )
-    contribution_type = models.ForeignKey(
-        ContributionType,
-        on_delete=models.PROTECT
+        related_name='next_of_kin'
     )
     
-    total_balance = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        validators=[MinValueValidator(Decimal('0.00'))]
-    )
+    full_name = models.CharField(max_length=200)
+    relationship = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=17)
+    email = models.EmailField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    id_number = models.CharField(max_length=20, blank=True, null=True)
     
-    last_contribution_date = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = 'sacco_balances'
-        verbose_name = 'SACCO Balance'
-        verbose_name_plural = 'SACCO Balances'
-        unique_together = ['member', 'contribution_type']
+        db_table = 'next_of_kin'
+        verbose_name = 'Next of Kin'
+        verbose_name_plural = 'Next of Kin'
     
     def __str__(self):
-        return f"{self.member.full_name} - {self.contribution_type.name}: KES {self.total_balance}"
-
-
-class ContributionSummary(models.Model):
-    """Overall SACCO summary statistics"""
-    
-    contribution_type = models.ForeignKey(
-        ContributionType,
-        on_delete=models.PROTECT,
-        related_name='summaries'
-    )
-    
-    total_amount = models.DecimalField(
-        max_digits=15,
-        decimal_places=2,
-        default=Decimal('0.00')
-    )
-    total_contributions = models.IntegerField(default=0)
-    active_members = models.IntegerField(default=0)
-    
-    last_updated = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        db_table = 'contribution_summaries'
-        verbose_name = 'Contribution Summary'
-        verbose_name_plural = 'Contribution Summaries'
-    
-    def __str__(self):
-        return f"{self.contribution_type.name} Summary - Total: KES {self.total_amount}"
+        return f"{self.full_name} - {self.user.full_name}'s Next of Kin"

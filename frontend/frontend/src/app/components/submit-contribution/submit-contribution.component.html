@@ -1,1 +1,108 @@
-<p>submit-contribution works!</p>
+<div class="submit-container">
+  <mat-card class="submit-card">
+    <mat-card-header>
+      <button mat-icon-button routerLink="/member" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <mat-card-title>Submit Contribution</mat-card-title>
+        <mat-card-subtitle>Enter your M-Pesa transaction details</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading) {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      } @else {
+        <form [formGroup]="contributionForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contribution Type</mat-label>
+            <mat-select formControlName="contribution_type">
+              @for (type of contributionTypes; track type.id) {
+                <mat-option [value]="type.id">
+                  {{ type.name }}
+                  @if (type.description) {
+                    <span class="option-description">- {{ type.description }}</span>
+                  }
+                </mat-option>
+              }
+            </mat-select>
+            @if (contributionForm.get('contribution_type')?.hasError('required') && contributionForm.get('contribution_type')?.touched) {
+              <mat-error>Contribution type is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Amount (KES)</mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="5000">
+            <span matPrefix>KES&nbsp;</span>
+            @if (contributionForm.get('amount')?.hasError('required') && contributionForm.get('amount')?.touched) {
+              <mat-error>Amount is required</mat-error>
+            }
+            @if (contributionForm.get('amount')?.hasError('min')) {
+              <mat-error>Amount must be greater than 0</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>M-Pesa Transaction Code</mat-label>
+            <input matInput formControlName="mpesa_transaction_code" placeholder="RBK1X2Y3Z4">
+            <mat-hint>Enter the code from your M-Pesa confirmation SMS</mat-hint>
+            @if (contributionForm.get('mpesa_transaction_code')?.hasError('required') && contributionForm.get('mpesa_transaction_code')?.touched) {
+              <mat-error>Transaction code is required</mat-error>
+            }
+            @if (contributionForm.get('mpesa_transaction_code')?.hasError('minlength')) {
+              <mat-error>Transaction code must be at least 10 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>M-Pesa Phone Number</mat-label>
+            <input matInput formControlName="mpesa_phone_number" placeholder="+254712345678">
+            <mat-hint>Phone number used for the M-Pesa transaction</mat-hint>
+            @if (contributionForm.get('mpesa_phone_number')?.hasError('required') && contributionForm.get('mpesa_phone_number')?.touched) {
+              <mat-error>Phone number is required</mat-error>
+            }
+            @if (contributionForm.get('mpesa_phone_number')?.hasError('pattern')) {
+              <mat-error>Invalid phone number format</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes (Optional)</mat-label>
+            <textarea matInput formControlName="notes" rows="3" placeholder="Any additional information..."></textarea>
+          </mat-form-field>
+
+          <div class="button-row">
+            <button mat-raised-button type="button" (click)="cancel()">
+              Cancel
+            </button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
+              @if (submitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                Submit Contribution
+              }
+            </button>
+          </div>
+        </form>
+
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <div class="info-content">
+            <h4>How to contribute:</h4>
+            <ol>
+              <li>Send money via M-Pesa to the SACCO paybill/till number</li>
+              <li>Wait for the M-Pesa confirmation SMS</li>
+              <li>Copy the transaction code from the SMS</li>
+              <li>Fill in this form with the transaction details</li>
+              <li>Admin will verify and update your balance</li>
+            </ol>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
