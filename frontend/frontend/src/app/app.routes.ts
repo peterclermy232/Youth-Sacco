@@ -114,11 +114,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/admin-dashboard/admin-dashboard.component')
           .then(m => m.AdminDashboardComponent)
       },
-      {
-        path: 'members',
-        loadComponent: () => import('./features/admin/members-list/members-list.component')
-          .then(m => m.MembersListComponent)
-      },
+      // {
+      //   path: 'members',
+      //   loadComponent: () => import('./features/admin/members-list/members-list.component')
+      //     .then(m => m.MembersListComponent)
+      // },
       {
         path: 'contributions/pending',
         loadComponent: () => import('./features/contributions/verify-contribution/verify-contribution.component')

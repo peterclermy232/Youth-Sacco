@@ -1,1 +1,198 @@
-<p>member-dashboard works!</p>
+<div class="member-dashboard-wrapper">
+  <!-- Top Navigation -->
+  <nav class="top-navbar">
+    <div class="navbar-content">
+      <div class="navbar-left">
+        <div class="logo-section">
+          <mat-icon class="logo-icon">account_balance</mat-icon>
+          <span class="logo-text">SACCO Portal</span>
+        </div>
+      </div>
+
+      <div class="navbar-right">
+        <button mat-icon-button class="notification-button">
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <div class="user-menu">
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+            <div class="avatar">
+              <span>{{ currentUser?.first_name?.[0] }}{{ currentUser?.last_name?.[0] }}</span>
+            </div>
+            <span class="user-name">{{ currentUser?.first_name }}</span>
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item routerLink="/member/profile">
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>Settings</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <div class="content-container">
+      <!-- Welcome Section -->
+      <div class="welcome-section">
+        <div class="welcome-text">
+          <h1>Welcome back, {{ currentUser?.first_name }}! 👋</h1>
+          <p>Here's your financial overview and recent activity</p>
+        </div>
+        <button mat-raised-button color="primary" class="primary-action" routerLink="/member/submit-contribution">
+          <mat-icon>add_circle</mat-icon>
+          Submit Contribution
+        </button>
+      </div>
+
+      <!-- Balance Cards -->
+      <div class="balance-section">
+        <h2 class="section-title">Your Balances</h2>
+        <div class="balance-grid">
+          @for (balance of balances; track balance.contribution_type) {
+            <mat-card class="balance-card">
+              <div class="balance-header">
+                <div class="balance-icon-wrapper">
+                  <mat-icon>account_balance_wallet</mat-icon>
+                </div>
+                <mat-chip class="balance-type">{{ balance.contribution_type }}</mat-chip>
+              </div>
+              <div class="balance-amount">
+                <span class="currency">KES</span>
+                <span class="amount">{{ balance.total_balance | number:'1.2-2' }}</span>
+              </div>
+              @if (balance.last_contribution_date) {
+                <div class="balance-footer">
+                  <mat-icon>schedule</mat-icon>
+                  <span>Last contribution: {{ balance.last_contribution_date | date:'MMM d, y' }}</span>
+                </div>
+              }
+            </mat-card>
+          } @empty {
+            <mat-card class="empty-balance-card">
+              <div class="empty-content">
+                <mat-icon>info</mat-icon>
+                <p>No balances yet. Start contributing to build your savings!</p>
+              </div>
+            </mat-card>
+          }
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions-section">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="actions-grid">
+          <mat-card class="action-card" routerLink="/member/submit-contribution">
+            <div class="action-icon blue">
+              <mat-icon>add_circle</mat-icon>
+            </div>
+            <div class="action-content">
+              <h3>New Contribution</h3>
+              <p>Submit M-Pesa transaction</p>
+            </div>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/member/contributions">
+            <div class="action-icon purple">
+              <mat-icon>history</mat-icon>
+            </div>
+            <div class="action-content">
+              <h3>View History</h3>
+              <p>All your contributions</p>
+            </div>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/member/profile">
+            <div class="action-icon green">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="action-content">
+              <h3>My Profile</h3>
+              <p>Manage your details</p>
+            </div>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- Recent Contributions -->
+      <div class="recent-section">
+        <div class="section-header">
+          <h2 class="section-title">Recent Contributions</h2>
+          <button mat-button color="primary" routerLink="/member/contributions" class="view-all-button">
+            View All
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+
+        @if (recentContributions.length > 0) {
+          <mat-card class="contributions-card">
+            <div class="contributions-list">
+              @for (contribution of recentContributions; track contribution.id) {
+                <div class="contribution-item">
+                  <div class="contribution-left">
+                    <div class="contribution-icon-wrapper" [class.verified]="contribution.status === 'VERIFIED'"
+                         [class.pending]="contribution.status === 'PENDING'"
+                         [class.rejected]="contribution.status === 'REJECTED'">
+                      <mat-icon>
+                        @if (contribution.status === 'VERIFIED') {
+                          check_circle
+                        } @else if (contribution.status === 'PENDING') {
+                          schedule
+                        } @else {
+                          cancel
+                        }
+                      </mat-icon>
+                    </div>
+                    <div class="contribution-details">
+                      <div class="contribution-title">{{ contribution.contribution_type_name }}</div>
+                      <div class="contribution-date">{{ contribution.submitted_at | date:'MMM d, y • h:mm a' }}</div>
+                    </div>
+                  </div>
+                  <div class="contribution-right">
+                    <div class="contribution-amount">KES {{ contribution.amount | number:'1.2-2' }}</div>
+                    <mat-chip [class]="'status-' + contribution.status.toLowerCase()">
+                      {{ contribution.status }}
+                    </mat-chip>
+                  </div>
+                </div>
+                @if (!$last) {
+                  <mat-divider></mat-divider>
+                }
+              }
+            </div>
+          </mat-card>
+        } @else {
+          <mat-card class="empty-contributions-card">
+            <div class="empty-state">
+              <div class="empty-icon">
+                <mat-icon>receipt_long</mat-icon>
+              </div>
+              <h3>No contributions yet</h3>
+              <p>Start building your savings by making your first contribution</p>
+              <button mat-raised-button color="primary" routerLink="/member/submit-contribution">
+                <mat-icon>add</mat-icon>
+                Submit First Contribution
+              </button>
+            </div>
+          </mat-card>
+        }
+      </div>
+    </div>
+  </div>
+</div>

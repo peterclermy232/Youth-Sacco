@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -27,12 +28,12 @@ export class HeaderComponent implements OnInit {
 
   pageTitle = 'Dashboard';
   currentUser: any;
-  unreadCount$ = this.notificationService.unreadCount$;
 
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService
   ) {}
+  unreadCount$ = this.notificationService.unreadCount$;
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe(user => {
