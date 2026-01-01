@@ -1,1 +1,30 @@
-<p>admin-review works!</p>
+<h2 class="page-title">Pending Applications</h2>
+
+<div class="document-grid">
+  <div
+    class="document-card"
+    *ngFor="let app of pendingApplications"
+    (click)="select(app)"
+  >
+    <div class="title">{{ app.application_type }}</div>
+    <div class="meta">{{ app.reason }}</div>
+    <span class="status pending">Pending</span>
+  </div>
+</div>
+
+<div *ngIf="selected" class="review-card">
+  <div class="section">
+    <div class="label">Applicant</div>
+    <div class="value">{{ selected.user_name }}</div>
+  </div>
+
+  <div class="section">
+    <div class="label">Reason</div>
+    <div class="value">{{ selected.reason }}</div>
+  </div>
+
+  <div class="review-actions">
+  <button class="approve" (click)="review('APPROVE')">Approve</button>
+  <button class="reject" (click)="review('REJECT')">Reject</button>
+</div>
+</div>

@@ -1,1 +1,32 @@
-<p>application-list works!</p>
+<h2 class="page-title">My Applications</h2>
+
+<div class="table-wrapper" *ngIf="!loading">
+  <table *ngIf="applications.length">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let app of applications">
+        <td>{{ app.application_type }}</td>
+        <td>{{ app.reason }}</td>
+        <td>
+          <span class="status" [ngClass]="getStatusClass(app.status)">
+            {{ app.status }}
+          </span>
+        </td>
+        <td>{{ app.created_at | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!applications.length">
+    No applications submitted yet.
+  </div>
+</div>
+
+<div *ngIf="loading">Loading applications...</div>

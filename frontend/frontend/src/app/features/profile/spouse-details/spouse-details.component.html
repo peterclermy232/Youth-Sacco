@@ -1,1 +1,13 @@
-<p>spouse-details works!</p>
+<section class="page" *ngIf="spouse">
+  <h2>Spouse Details</h2>
+
+  <p><strong>Name:</strong> {{ spouse.name }}</p>
+  <p><strong>Phone:</strong> {{ spouse.phone_number }}</p>
+  <p><strong>Profession:</strong> {{ spouse.profession }}</p>
+
+  <a *ngIf="spouse.identity_document" [href]="spouse.identity_document" target="_blank">
+    View Identity Document
+  </a>
+</section>
+
+<p *ngIf="!spouse">No spouse details available.</p>

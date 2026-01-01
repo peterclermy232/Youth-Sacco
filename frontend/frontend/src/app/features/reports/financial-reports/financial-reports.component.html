@@ -1,1 +1,32 @@
-<p>financial-reports works!</p>
+<section class="page">
+  <h2>Financial Reports</h2>
+
+  <button (click)="loadReport()">Load Report</button>
+
+  <div *ngIf="report">
+    <h3>Summary ({{ report.period }})</h3>
+
+    <p>Total Contributions: <strong>{{ report.total_contributions | number }}</strong></p>
+    <p>Total Members: <strong>{{ report.total_members }}</strong></p>
+
+    <h4>Breakdown by Type</h4>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Count</th>
+      </tr>
+      <tr *ngFor="let t of report.by_type">
+        <td>{{ t.type }}</td>
+        <td>{{ t.amount | number }}</td>
+        <td>{{ t.count }}</td>
+      </tr>
+    </table>
+
+    <div class="export-actions">
+      <button (click)="export('pdf')">Export PDF</button>
+      <button (click)="export('csv')">Export CSV</button>
+      <button (click)="export('xlsx')">Export XLSX</button>
+    </div>
+  </div>
+</section>

@@ -1,1 +1,25 @@
-<p>notification-preferences works!</p>
+<section class="page" *ngIf="preferences">
+  <h2>Notification Preferences</h2>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="preferences.financial" />
+    Financial Notifications
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="preferences.administrative" />
+    Administrative Notifications
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="preferences.support" />
+    Support Notifications
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="preferences.general" />
+    General Notifications
+  </label>
+
+  <button (click)="save()">Save Preferences</button>
+</section>

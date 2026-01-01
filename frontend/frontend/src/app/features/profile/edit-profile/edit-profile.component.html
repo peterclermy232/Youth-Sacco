@@ -1,1 +1,27 @@
-<p>edit-profile works!</p>
+<section class="page" *ngIf="profile">
+  <h2>Edit Profile</h2>
+
+  <form #form="ngForm">
+    <label>
+      Full Name
+      <input type="text" [value]="profile.full_name" disabled />
+    </label>
+
+    <label>
+      Phone Number
+      <input type="text" [value]="profile.phone_number" disabled />
+    </label>
+
+    <label>
+      Profession
+      <input type="text" name="profession" />
+    </label>
+
+    <label>
+      Upload Passport Photo
+      <input type="file" />
+    </label>
+
+    <button type="submit">Save Changes</button>
+  </form>
+</section>

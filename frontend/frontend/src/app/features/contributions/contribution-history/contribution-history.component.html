@@ -1,1 +1,52 @@
-<p>contribution-history works!</p>
+<h2 class="page-title">Contribution History</h2>
+
+<div class="filter">
+  <label for="month">Filter by Month:</label>
+  <input
+    type="month"
+    id="month"
+    [(ngModel)]="filterMonth"
+    (change)="onFilterChange(filterMonth)"
+  />
+</div>
+
+<div *ngIf="loading" class="loading">Loading contributions...</div>
+
+<div class="table-wrapper" *ngIf="!loading && contributions.length">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Type</th>
+        <th>M-Pesa Code</th>
+        <th>Phone Number</th>
+        <th>Status</th>
+        <th>Verified By</th>
+        <th>Rejection Reason</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of contributions">
+        <td>{{ c.submitted_at | date: 'mediumDate' }}</td>
+        <td>{{ c.amount | currency }}</td>
+        <td>{{ c.contribution_type_name }}</td>
+        <td>{{ c.mpesa_transaction_code }}</td>
+        <td>{{ c.mpesa_phone_number }}</td>
+        <td>
+          <span class="status" [ngClass]="getStatusClass(c.status)">
+            {{ c.status }}
+          </span>
+        </td>
+        <td>{{ c.verified_by_name || '-' }}</td>
+        <td>{{ c.rejection_reason || '-' }}</td>
+        <td>{{ c.notes || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!loading && !contributions.length">
+  No contributions found.
+</div>

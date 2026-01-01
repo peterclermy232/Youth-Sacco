@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SpouseDetails } from '../../../models/user.model';
+import { ProfileService } from '../../../services/profile.service';
+
 
 @Component({
   selector: 'app-spouse-details',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './spouse-details.component.html',
-  styleUrl: './spouse-details.component.scss'
+  styleUrls: ['./spouse-details.component.scss']
 })
-export class SpouseDetailsComponent {
+export class SpouseDetailsComponent implements OnInit {
+  spouse?: SpouseDetails;
 
+  constructor(private profileService: ProfileService) {}
+
+  ngOnInit(): void {
+    this.profileService.getSpouseDetails()
+      .subscribe(data => this.spouse = data);
+  }
 }

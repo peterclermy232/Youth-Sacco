@@ -1,1 +1,27 @@
-<p>document-list works!</p>
+<h2 class="page-title">My Documents</h2>
+
+<div *ngIf="loading">Loading documents...</div>
+
+<div class="document-grid" *ngIf="!loading && documents.length">
+  <div class="document-card" *ngFor="let doc of documents">
+    <div class="title">{{ doc.title }}</div>
+    <div class="meta">{{ doc.category_name }}</div>
+
+    <span class="status" [ngClass]="getStatusClass(doc.status)">
+      {{ doc.status }}
+    </span>
+
+    <div class="actions">
+      <button class="view" (click)="window.open(doc.file, '_blank')">
+        View
+      </button>
+      <button class="delete" (click)="deleteDocument(doc.id)">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading && !documents.length">
+  No documents uploaded yet.
+</div>

@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { UserSettings } from '../../../models/settings';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'app-account-settings',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './account-settings.component.html',
-  styleUrl: './account-settings.component.scss'
+  styleUrls: ['./account-settings.component.scss']
 })
-export class AccountSettingsComponent {
+export class AccountSettingsComponent implements OnInit {
+  settings?: UserSettings;
 
+  constructor(private settingsService: SettingsService) {}
+
+  ngOnInit(): void {
+    this.settingsService.settings$
+      .subscribe(settings => this.settings = settings || undefined);
+  }
+
+  update(data: Partial<UserSettings>): void {
+    this.settingsService.updateSettings(data).subscribe();
+  }
 }

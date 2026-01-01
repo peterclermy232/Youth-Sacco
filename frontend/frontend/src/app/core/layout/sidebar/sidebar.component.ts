@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../services/auth.service';
+import { Observable } from 'rxjs/internal/Observable';
 
 interface MenuItem {
   label: string;
@@ -32,7 +33,7 @@ export class SidebarComponent {
   @Input() isMobile = false;
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  currentUser$ = this.authService.currentUser;
+
   isAdmin = false;
   expandedMenus: Set<string> = new Set();
 
@@ -129,16 +130,21 @@ export class SidebarComponent {
       route: '/admin/settings'
     }
   ];
-
+  currentUser$!: Observable<any>;
   constructor(
     private authService: AuthService,
     private router: Router
   ) {
+
+  }
+
+  ngOnInit(): void {
+    this.currentUser$ = this.authService.currentUser;
+
     this.authService.currentUser.subscribe(user => {
       this.isAdmin = user?.role === 'ADMIN';
     });
   }
-
   get menuItems(): MenuItem[] {
     return this.isAdmin ? this.adminMenuItems : this.memberMenuItems;
   }

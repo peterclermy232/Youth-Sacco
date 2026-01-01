@@ -1,1 +1,18 @@
-<p>activity-logs works!</p>
+<h2>Activity Logs</h2>
+
+<div *ngIf="loading">Loading...</div>
+
+<table *ngIf="!loading">
+  <tr>
+    <th>User</th>
+    <th>Action</th>
+    <th>Description</th>
+    <th>Date</th>
+  </tr>
+  <tr *ngFor="let log of logs">
+    <td>{{ log.user }}</td>
+    <td>{{ log.action }}</td>
+    <td>{{ log.description }}</td>
+    <td>{{ log.timestamp | date:'medium' }}</td>
+  </tr>
+</table>

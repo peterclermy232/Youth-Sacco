@@ -1,0 +1,28 @@
+.notification-item {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+
+  &.unread {
+    background: #f0f7ff;
+    border-left: 4px solid #1976d2;
+  }
+
+  mat-icon {
+    color: #1976d2;
+  }
+
+  .content {
+    flex: 1;
+    cursor: pointer;
+  }
+
+  .delete {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #999;
+  }
+}

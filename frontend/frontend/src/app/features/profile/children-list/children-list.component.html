@@ -1,1 +1,25 @@
-<p>children-list works!</p>
+<section class="page">
+  <h2>Children</h2>
+
+  <table *ngIf="children.length">
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Birth Certificate</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let child of children">
+      <td>{{ child.name }}</td>
+      <td>{{ child.age }}</td>
+      <td>
+        <a [href]="child.birth_certificate" target="_blank">View</a>
+      </td>
+      <td>
+        <button (click)="deleteChild(child.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+  <p *ngIf="!children.length">No children records found.</p>
+</section>

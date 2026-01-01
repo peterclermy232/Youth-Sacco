@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.filter {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 500;
+  }
+
+  input {
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+  }
+}
+
+.table-wrapper {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      text-align: left;
+      padding: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #f5f6fa;
+      font-weight: 600;
+      color: #333;
+    }
+
+    tr {
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.verified {
+    background: #e6f7ed;
+    color: #1e7e34;
+  }
+
+  &.pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.rejected {
+    background: #fdecea;
+    color: #b71c1c;
+  }
+}
+
+.loading {
+  font-style: italic;
+  color: #777;
+}

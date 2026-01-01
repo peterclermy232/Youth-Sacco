@@ -7,6 +7,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
+import { Observable } from 'rxjs/internal/Observable';
 
 
 @Component({
@@ -28,14 +29,15 @@ export class HeaderComponent implements OnInit {
 
   pageTitle = 'Dashboard';
   currentUser: any;
-
+  unreadCount$!: Observable<number>;
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService
   ) {}
-  unreadCount$ = this.notificationService.unreadCount$;
+
 
   ngOnInit(): void {
+    this.unreadCount$ = this.notificationService.unreadCount$;
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
