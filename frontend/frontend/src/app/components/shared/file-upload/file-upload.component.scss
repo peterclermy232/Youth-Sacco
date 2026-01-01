@@ -1,0 +1,120 @@
+.file-upload-container {
+      width: 100%;
+    }
+
+    .upload-area {
+      border: 2px dashed #E5E7EB;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: #F9FAFB;
+
+      &:hover {
+        border-color: #4F46E5;
+        background: #F3F4F6;
+      }
+
+      &.has-file {
+        border-color: #10B981;
+        background: rgba(16, 185, 129, 0.05);
+      }
+    }
+
+    .upload-icon {
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #6B7280;
+        margin-bottom: 1rem;
+      }
+
+      .has-file & mat-icon {
+        color: #10B981;
+      }
+    }
+
+    .upload-text {
+      margin-bottom: 1.5rem;
+
+      .title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0.25rem;
+      }
+
+      .subtitle {
+        font-size: 0.875rem;
+        color: #6B7280;
+      }
+    }
+
+    .file-list {
+      margin-top: 1rem;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.875rem 1rem;
+      background: white;
+      border-bottom: 1px solid #E5E7EB;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .file-icon {
+        color: #4F46E5;
+        flex-shrink: 0;
+      }
+
+      .file-info {
+        flex: 1;
+        min-width: 0;
+
+        .file-name {
+          font-weight: 500;
+          color: #111827;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .file-size {
+          font-size: 0.875rem;
+          color: #6B7280;
+        }
+      }
+    }
+
+    .error-message {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 8px;
+      color: #EF4444;
+      font-size: 0.875rem;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .help-text {
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+      color: #6B7280;
+      text-align: center;
+    }

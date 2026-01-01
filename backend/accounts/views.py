@@ -1,13 +1,15 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 
-from .models import NextOfKin
+from .models import NextOfKin, SpouseDetails, Child, Beneficiary
 from .serializers import (
     UserSerializer, UserRegistrationSerializer, LoginSerializer,
-    NextOfKinSerializer, UserProfileSerializer
+    NextOfKinSerializer, UserProfileSerializer, SpouseDetailsSerializer,
+    ChildSerializer, BeneficiarySerializer
 )
 from .permissions import IsAdmin, IsOwnerOrAdmin, IsMemberOwner
 
@@ -58,10 +60,11 @@ class LoginView(APIView):
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
-    """Get and update user profile"""
+    """Get and update complete user profile"""
     
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
     
     def get_object(self):
         return self.request.user
@@ -83,6 +86,76 @@ class UserDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAdmin]
 
 
+# Spouse Details Views
+class SpouseDetailsView(generics.RetrieveUpdateAPIView):
+    """Get and update spouse details"""
+    
+    serializer_class = SpouseDetailsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def get_object(self):
+        spouse, created = SpouseDetails.objects.get_or_create(user=self.request.user)
+        return spouse
+
+
+# Children Views
+class ChildListCreateView(generics.ListCreateAPIView):
+    """List and create children"""
+    
+    serializer_class = ChildSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def get_queryset(self):
+        return Child.objects.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ChildDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Get, update, or delete a child"""
+    
+    serializer_class = ChildSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def get_queryset(self):
+        return Child.objects.filter(user=self.request.user)
+
+
+# Beneficiary Views
+class BeneficiaryListCreateView(generics.ListCreateAPIView):
+    """List and create beneficiaries"""
+    
+    serializer_class = BeneficiarySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def get_queryset(self):
+        if self.request.user.role == 'ADMIN':
+            return Beneficiary.objects.all()
+        return Beneficiary.objects.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class BeneficiaryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Get, update, or delete a beneficiary"""
+    
+    serializer_class = BeneficiarySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    def get_queryset(self):
+        if self.request.user.role == 'ADMIN':
+            return Beneficiary.objects.all()
+        return Beneficiary.objects.filter(user=self.request.user)
+
+
+# Next of Kin Views (keeping for compatibility)
 class NextOfKinCreateView(generics.CreateAPIView):
     """Create next of kin for current user"""
     

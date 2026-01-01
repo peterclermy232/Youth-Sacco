@@ -1,0 +1,96 @@
+<div class="beneficiary-container">
+      <div class="page-header">
+        <div>
+          <h1>Beneficiaries</h1>
+          <p>Manage your beneficiary information</p>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/member/beneficiaries/add">
+          <mat-icon>add</mat-icon>
+          Add Beneficiary
+        </button>
+      </div>
+
+      <app-loading-spinner *ngIf="loading" message="Loading beneficiaries..."></app-loading-spinner>
+
+      <mat-card *ngIf="!loading && beneficiaries.length > 0" class="beneficiaries-card">
+        <div class="table-container">
+          <table mat-table [dataSource]="beneficiaries" class="beneficiaries-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Full Name</th>
+              <td mat-cell *matCellDef="let beneficiary">
+                <div class="name-cell">
+                  <strong>{{ beneficiary.full_name }}</strong>
+                  <span class="primary-badge" *ngIf="beneficiary.is_primary">PRIMARY</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="relationship">
+              <th mat-header-cell *matHeaderCellDef>Relationship</th>
+              <td mat-cell *matCellDef="let beneficiary">{{ beneficiary.relationship }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="contact">
+              <th mat-header-cell *matHeaderCellDef>Contact</th>
+              <td mat-cell *matCellDef="let beneficiary">
+                <div class="contact-cell">
+                  <div>{{ beneficiary.phone_number }}</div>
+                  <div class="email">{{ beneficiary.email || 'N/A' }}</div>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="share">
+              <th mat-header-cell *matHeaderCellDef>Share %</th>
+              <td mat-cell *matCellDef="let beneficiary">
+                <div class="share-badge">{{ beneficiary.percentage_share }}%</div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let beneficiary">
+                <app-status-badge [status]="beneficiary.status" [label]="beneficiary.status"></app-status-badge>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let beneficiary">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item [routerLink]="['/member/beneficiaries/edit', beneficiary.id]">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteBeneficiary(beneficiary.id!)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+        <div class="total-share">
+          <span>Total Allocated Share:</span>
+          <strong>{{ totalShare }}%</strong>
+        </div>
+      </mat-card>
+
+      <app-empty-state
+        *ngIf="!loading && beneficiaries.length === 0"
+        icon="group"
+        title="No beneficiaries yet"
+        message="Add beneficiaries to ensure your contributions are distributed according to your wishes"
+        actionLabel="Add First Beneficiary"
+        actionIcon="add"
+        (action)="navigateToAdd()"
+      ></app-empty-state>
+    </div>

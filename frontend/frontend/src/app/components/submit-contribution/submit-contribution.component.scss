@@ -1,7 +1,8 @@
+/* Submit Contribution - Exact Match */
 .submit-container {
   min-height: 100vh;
-  background: var(--bg-primary);
-  padding: 2rem;
+  background: #F5F7FA;
+  padding: 32px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,20 +11,24 @@
 .submit-card {
   max-width: 700px;
   width: 100%;
-  border-radius: var(--border-radius-lg) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #E5E7EB !important;
 
   mat-card-header {
-    padding: 1.5rem !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px !important;
+    background: linear-gradient(135deg, #5B9FFF 0%, #2B7FFF 100%);
     color: white;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
+    gap: 16px;
+    border-radius: 16px 16px 0 0 !important;
 
     .back-button {
       flex-shrink: 0;
       color: white;
+      width: 40px !important;
+      height: 40px !important;
     }
 
     .header-content {
@@ -31,20 +36,20 @@
     }
 
     mat-card-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
       color: white !important;
     }
 
     mat-card-subtitle {
-      font-size: 0.9rem;
+      font-size: 14px;
       color: rgba(255, 255, 255, 0.9) !important;
     }
   }
 
   mat-card-content {
-    padding: 2rem !important;
+    padding: 32px !important;
   }
 }
 
@@ -52,18 +57,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem;
+  padding: 64px;
 }
 
 form {
   .mat-mdc-form-field {
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .mat-mdc-select-value {
+    font-size: 14px;
   }
 
   .option-description {
-    font-size: 0.875rem;
+    font-size: 12px;
     color: var(--text-secondary);
-    margin-left: 0.5rem;
+    margin-left: 8px;
+  }
+
+  input, textarea {
+    font-size: 14px;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background: #F9FAFB;
   }
 }
 
@@ -74,34 +91,36 @@ form {
 .button-row {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB;
 
   button {
-    min-width: 150px;
-    height: 44px;
-    border-radius: 10px;
-    font-weight: 600;
+    min-width: 140px;
+    height: 44px !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
 
     &[type="button"] {
       color: var(--text-secondary);
+      border-color: #E5E7EB !important;
     }
   }
 }
 
 .info-box {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
-  border-radius: var(--border-radius);
-  border-left: 4px solid var(--info-color);
+  margin-top: 32px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(91, 159, 255, 0.08), rgba(43, 127, 255, 0.08));
+  border-radius: 12px;
+  border-left: 4px solid #2B7FFF;
   display: flex;
-  gap: 1rem;
+  gap: 16px;
 
   mat-icon {
-    color: var(--info-color);
+    color: #2B7FFF;
     flex-shrink: 0;
     font-size: 24px;
     width: 24px;
@@ -112,21 +131,21 @@ form {
     flex: 1;
 
     h4 {
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 12px;
     }
 
     ol {
       margin: 0;
-      padding-left: 1.25rem;
+      padding-left: 20px;
 
       li {
         color: var(--text-secondary);
-        font-size: 0.9rem;
+        font-size: 13px;
         line-height: 1.6;
-        margin-bottom: 0.5rem;
+        margin-bottom: 8px;
 
         &:last-child {
           margin-bottom: 0;
@@ -138,17 +157,17 @@ form {
 
 @media (max-width: 768px) {
   .submit-container {
-    padding: 1rem;
+    padding: 20px 16px;
   }
 
   .submit-card {
     mat-card-content {
-      padding: 1.5rem !important;
+      padding: 24px !important;
     }
   }
 
   .button-row {
-    flex-direction: column;
+    flex-direction: column-reverse;
 
     button {
       width: 100%;

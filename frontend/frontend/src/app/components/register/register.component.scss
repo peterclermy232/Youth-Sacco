@@ -3,60 +3,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  padding: 2rem;
+  background: #F5F7FA;
+  padding: 40px 20px;
 }
 
 .register-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  max-width: 1200px;
+  display: flex;
+  max-width: 1100px;
   width: 100%;
   background: white;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.5s ease-in-out;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 968px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
 
 .register-branding {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  padding: 3rem;
+  flex: 1;
+  background: linear-gradient(180deg, #7DDFFF 0%, #5B9FFF 100%);
+  padding: 60px 48px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
   position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    top: -150px;
-    left: -150px;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 50%;
-    bottom: -100px;
-    right: -100px;
-  }
 
   @media (max-width: 968px) {
-    padding: 2rem;
+    padding: 40px 24px;
   }
 }
 
@@ -66,65 +43,66 @@
 }
 
 .logo-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2.5rem;
+  text-align: center;
+  margin-bottom: 40px;
 
   .logo-icon {
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1rem;
+    margin: 0 auto 20px;
     backdrop-filter: blur(10px);
 
     mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
       color: white;
     }
   }
 
   h1 {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 600;
     margin: 0;
+    color: white;
   }
 }
 
 .tagline {
   text-align: center;
-  font-size: 1.125rem;
+  font-size: 15px;
+  line-height: 1.6;
   opacity: 0.95;
-  margin-bottom: 3rem;
+  margin-bottom: 48px;
 }
 
 .benefits {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .benefit-item {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
 
   .check-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.2);
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    backdrop-filter: blur(10px);
 
     mat-icon {
       font-size: 20px;
@@ -133,48 +111,55 @@
     }
   }
 
-  h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-  }
+  div {
+    h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: white;
+    }
 
-  p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    margin: 0;
+    p {
+      font-size: 13px;
+      opacity: 0.9;
+      margin: 0;
+      line-height: 1.5;
+    }
   }
 }
 
 .register-form-section {
-  padding: 3rem;
+  flex: 1;
+  padding: 60px 48px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: white;
 
   @media (max-width: 968px) {
-    padding: 2rem;
+    padding: 40px 24px;
   }
 }
 
 .register-card {
   box-shadow: none !important;
   border: none !important;
+  background: transparent !important;
 }
 
 .card-header {
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 
   h2 {
-    font-size: 1.875rem;
-    font-weight: 700;
+    font-size: 26px;
+    font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
   }
 
   p {
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 14px;
   }
 }
 
@@ -185,15 +170,21 @@ mat-card-content {
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 16px;
+  margin-bottom: 20px;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
+    gap: 0;
   }
 }
 
 .half-width {
   width: 100%;
+
+  @media (max-width: 600px) {
+    margin-bottom: 20px;
+  }
 }
 
 .full-width {
@@ -201,16 +192,28 @@ mat-card-content {
 }
 
 .mat-mdc-form-field {
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+
+  .mat-mdc-text-field-wrapper {
+    background: #F9FAFB;
+  }
+
+  input, textarea {
+    font-size: 14px;
+  }
 }
 
 .terms-section {
-  margin: 1.5rem 0;
+  margin: 20px 0 24px;
+
+  ::ng-deep .mat-mdc-checkbox {
+    font-size: 14px;
+  }
 
   .terms-link {
-    color: var(--primary-color);
+    color: #2B7FFF;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 500;
 
     &:hover {
       text-decoration: underline;
@@ -220,45 +223,51 @@ mat-card-content {
 
 .register-button {
   width: 100%;
-  height: 48px;
-  font-size: 1rem;
+  height: 44px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-radius: 8px !important;
 
   .button-spinner {
-    margin-right: 0.5rem;
+    margin-right: 8px;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
   }
 }
 
 .login-section {
   text-align: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB;
 
   p {
     color: var(--text-secondary);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+    margin-bottom: 16px;
+    font-size: 14px;
   }
 
   .login-button {
     width: 100%;
-    height: 48px;
+    height: 44px !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    border-color: #E5E7EB !important;
+    color: var(--text-primary) !important;
   }
 }
 
 .footer-text {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 32px;
   color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-@media (max-width: 600px) {
-  .name-row {
-    grid-template-columns: 1fr;
-  }
+  font-size: 13px;
 }

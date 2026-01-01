@@ -1,0 +1,70 @@
+<header class="app-header">
+      <div class="header-left">
+        <button mat-icon-button class="menu-toggle" (click)="toggleMenu.emit()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <h1 class="page-title">{{ pageTitle }}</h1>
+      </div>
+
+      <div class="header-right">
+        <!-- Search -->
+        <button mat-icon-button class="header-action">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <!-- Notifications -->
+        <button
+          mat-icon-button
+          class="header-action"
+          routerLink="/notifications"
+          [matBadge]="unreadCount$ | async"
+          [matBadgeHidden]="(unreadCount$ | async) === 0"
+          matBadgeColor="warn"
+        >
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <!-- User Menu -->
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+          <div class="user-avatar">
+            <img *ngIf="currentUser?.passport_photo" [src]="currentUser.passport_photo">
+            <div *ngIf="!currentUser?.passport_photo" class="avatar-placeholder">
+              {{ currentUser?.first_name?.[0] }}{{ currentUser?.last_name?.[0] }}
+            </div>
+          </div>
+          <span class="user-name">{{ currentUser?.first_name }}</span>
+          <mat-icon>expand_more</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu" class="user-dropdown">
+          <div class="user-info-header">
+            <div class="user-avatar-large">
+              {{ currentUser?.first_name?.[0] }}{{ currentUser?.last_name?.[0] }}
+            </div>
+            <div class="user-details">
+              <div class="name">{{ currentUser?.first_name }} {{ currentUser?.last_name }}</div>
+              <div class="email">{{ currentUser?.email || currentUser?.phone_number }}</div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </header>

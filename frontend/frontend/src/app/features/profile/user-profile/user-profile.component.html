@@ -1,0 +1,203 @@
+<div class="profile-container">
+      <app-loading-spinner *ngIf="loading" message="Loading profile..."></app-loading-spinner>
+
+      <div *ngIf="!loading && profile" class="profile-content">
+        <!-- Profile Header -->
+        <mat-card class="profile-header-card">
+          <div class="profile-header">
+            <div class="profile-avatar-section">
+              <div class="avatar-large">
+                <img *ngIf="profile.passport_photo" [src]="profile.passport_photo" alt="Profile">
+                <div *ngIf="!profile.passport_photo" class="avatar-placeholder">
+                  {{ profile.first_name[0] }}{{ profile.last_name[0] }}
+                </div>
+              </div>
+              <button mat-icon-button class="edit-avatar-btn" routerLink="/member/profile/edit">
+                <mat-icon>photo_camera</mat-icon>
+              </button>
+            </div>
+
+            <div class="profile-info">
+              <h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
+              <p class="phone-number">
+                <mat-icon>phone</mat-icon>
+                {{ profile.phone_number }}
+              </p>
+              <p class="email" *ngIf="profile.email">
+                <mat-icon>email</mat-icon>
+                {{ profile.email }}
+              </p>
+              <div class="badges">
+                <mat-chip class="role-chip">{{ profile.role }}</mat-chip>
+                <mat-chip class="status-chip" *ngIf="profile.is_active">Active</mat-chip>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <button mat-raised-button color="primary" routerLink="/member/profile/edit">
+                <mat-icon>edit</mat-icon>
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Profile Details Tabs -->
+        <mat-tab-group class="profile-tabs" animationDuration="300ms">
+          <!-- Personal Information -->
+          <mat-tab label="Personal Information">
+            <mat-card class="tab-content">
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Age</label>
+                  <p>{{ profile.age || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Gender</label>
+                  <p>{{ profile.gender || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Marital Status</label>
+                  <p>{{ profile.marital_status || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Number of Kids</label>
+                  <p>{{ profile.number_of_kids || 0 }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Profession</label>
+                  <p>{{ profile.profession || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Salary Range</label>
+                  <p>{{ profile.salary_range || 'Not provided' }}</p>
+                </div>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="documents-section">
+                <h3>Documents</h3>
+                <div class="document-list">
+                  <div class="document-item" *ngIf="profile.identity_document">
+                    <mat-icon>description</mat-icon>
+                    <span>Identity Document</span>
+                    <a [href]="profile.identity_document" target="_blank" mat-button color="primary">
+                      View
+                    </a>
+                  </div>
+                  <div class="empty-doc" *ngIf="!profile.identity_document">
+                    <mat-icon>info</mat-icon>
+                    <span>No identity document uploaded</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </mat-tab>
+
+          <!-- Spouse Details -->
+          <mat-tab label="Spouse Details" [disabled]="profile.marital_status !== 'MARRIED'">
+            <mat-card class="tab-content">
+              <div *ngIf="profile.spouse_details" class="info-grid">
+                <div class="info-item">
+                  <label>Full Name</label>
+                  <p>{{ profile.spouse_details.full_name }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Age</label>
+                  <p>{{ profile.spouse_details.age }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Phone Number</label>
+                  <p>{{ profile.spouse_details.phone_number }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Email</label>
+                  <p>{{ profile.spouse_details.email || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Profession</label>
+                  <p>{{ profile.spouse_details.profession || 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                  <label>ID Number</label>
+                  <p>{{ profile.spouse_details.id_number }}</p>
+                </div>
+              </div>
+
+              <div *ngIf="!profile.spouse_details" class="empty-state-small">
+                <mat-icon>person_add</mat-icon>
+                <p>No spouse details added yet</p>
+                <button mat-raised-button color="primary" routerLink="/member/profile/edit">
+                  Add Spouse Details
+                </button>
+              </div>
+            </mat-card>
+          </mat-tab>
+
+          <!-- Children -->
+          <mat-tab label="Children">
+            <mat-card class="tab-content">
+              <div class="section-header">
+                <h3>Children ({{ profile.children?.length || 0 }})</h3>
+                <button mat-raised-button color="primary" routerLink="/member/profile/edit">
+                  <mat-icon>add</mat-icon>
+                  Add Child
+                </button>
+              </div>
+
+              <div *ngIf="profile.children && profile.children.length > 0" class="children-list">
+                <div *ngFor="let child of profile.children" class="child-card">
+                  <div class="child-info">
+                    <h4>{{ child.full_name }}</h4>
+                    <p>Age: {{ child.age }} | Gender: {{ child.gender }}</p>
+                  </div>
+                  <button mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="!profile.children || profile.children.length === 0" class="empty-state-small">
+                <mat-icon>child_care</mat-icon>
+                <p>No children added yet</p>
+              </div>
+            </mat-card>
+          </mat-tab>
+
+          <!-- Beneficiaries -->
+          <mat-tab label="Beneficiaries">
+            <mat-card class="tab-content">
+              <div class="section-header">
+                <h3>Beneficiaries ({{ profile.beneficiaries?.length || 0 }})</h3>
+                <button mat-raised-button color="primary" routerLink="/member/beneficiaries/add">
+                  <mat-icon>add</mat-icon>
+                  Add Beneficiary
+                </button>
+              </div>
+
+              <div *ngIf="profile.beneficiaries && profile.beneficiaries.length > 0" class="beneficiary-list">
+                <div *ngFor="let beneficiary of profile.beneficiaries" class="beneficiary-card">
+                  <div class="beneficiary-info">
+                    <h4>{{ beneficiary.full_name }}</h4>
+                    <p>{{ beneficiary.relationship }} | {{ beneficiary.percentage_share }}%</p>
+                    <app-status-badge [status]="beneficiary.status" [label]="beneficiary.status"></app-status-badge>
+                  </div>
+                  <button mat-button color="primary" routerLink="/member/beneficiaries">
+                    View Details
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="!profile.beneficiaries || profile.beneficiaries.length === 0" class="empty-state-small">
+                <mat-icon>group</mat-icon>
+                <p>No beneficiaries added yet</p>
+                <button mat-raised-button color="primary" routerLink="/member/beneficiaries/add">
+                  Add First Beneficiary
+                </button>
+              </div>
+            </mat-card>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>

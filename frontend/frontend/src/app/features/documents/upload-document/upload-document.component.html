@@ -1,0 +1,50 @@
+<div class="upload-container">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Upload Document</mat-card-title>
+          <mat-card-subtitle>Upload and categorize your documents</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Document Category</mat-label>
+              <mat-select formControlName="category" required>
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Document Title</mat-label>
+              <input matInput formControlName="title" placeholder="e.g., National ID">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description (Optional)</mat-label>
+              <textarea matInput formControlName="description" rows="3"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Document Number (Optional)</mat-label>
+              <input matInput formControlName="document_number">
+            </mat-form-field>
+
+            <app-file-upload
+              label="Select Document"
+              acceptedTypes=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+              [maxSize]="10485760"
+              (fileSelected)="onFileSelected($event)"
+            ></app-file-upload>
+
+            <div class="button-row">
+              <button mat-button type="button" (click)="cancel()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="!selectedFile || uploading">
+                {{ uploading ? 'Uploading...' : 'Upload Document' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>

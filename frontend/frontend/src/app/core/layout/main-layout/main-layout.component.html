@@ -1,0 +1,31 @@
+ <div class="app-container">
+      <!-- Sidebar -->
+      <app-sidebar
+        [isCollapsed]="sidebarCollapsed"
+        [isMobile]="isMobile"
+        (toggleSidebar)="toggleSidebar()"
+      ></app-sidebar>
+
+      <!-- Main Content Area -->
+      <div class="main-content" [class.sidebar-collapsed]="sidebarCollapsed">
+        <!-- Header -->
+        <app-header (toggleMenu)="toggleSidebar()"></app-header>
+
+        <!-- Page Content -->
+        <main class="page-content">
+          <router-outlet></router-outlet>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+          <p>&copy; 2025 SACCO Management System. All rights reserved.</p>
+        </footer>
+      </div>
+
+      <!-- Mobile Overlay -->
+      <div
+        class="sidebar-overlay"
+        [class.active]="!sidebarCollapsed && isMobile"
+        (click)="toggleSidebar()"
+      ></div>
+    </div>

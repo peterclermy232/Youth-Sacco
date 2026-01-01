@@ -1,0 +1,50 @@
+.application-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #F9FAFB;
+      border-radius: 12px;
+
+      h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .info-item {
+      label {
+        display: block;
+        font-size: 0.875rem;
+        color: #6B7280;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      p {
+        font-weight: 500;
+        color: #111827;
+      }
+    }
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }

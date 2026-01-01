@@ -1,0 +1,65 @@
+<div class="file-upload-container">
+      <input
+        #fileInput
+        type="file"
+        (change)="onFileSelected($event)"
+        [accept]="acceptedTypes"
+        [multiple]="multiple"
+        style="display: none"
+      >
+
+      <div class="upload-area" [class.has-file]="selectedFiles.length > 0">
+        <div class="upload-icon">
+          <mat-icon>{{ selectedFiles.length > 0 ? 'check_circle' : 'cloud_upload' }}</mat-icon>
+        </div>
+
+        <div class="upload-text">
+          <p class="title">{{ selectedFiles.length > 0 ? 'File selected' : label }}</p>
+          <p class="subtitle" *ngIf="selectedFiles.length === 0">
+            {{ hint || 'or drag and drop here' }}
+          </p>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="fileInput.click()"
+        >
+          <mat-icon>{{ selectedFiles.length > 0 ? 'edit' : 'upload' }}</mat-icon>
+          {{ selectedFiles.length > 0 ? 'Change File' : 'Select File' }}
+        </button>
+      </div>
+
+      <div class="file-list" *ngIf="selectedFiles.length > 0">
+        <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+          <mat-icon class="file-icon">description</mat-icon>
+          <div class="file-info">
+            <div class="file-name">{{ file.name }}</div>
+            <div class="file-size">{{ formatFileSize(file.size) }}</div>
+          </div>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeFile(i)"
+            type="button"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <mat-progress-bar
+        *ngIf="uploading"
+        mode="indeterminate"
+        color="primary"
+      ></mat-progress-bar>
+
+      <p class="error-message" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        {{ errorMessage }}
+      </p>
+
+      <p class="help-text" *ngIf="helpText && !errorMessage">
+        {{ helpText }}
+      </p>

@@ -1,0 +1,119 @@
+.submit-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .submit-card {
+      border-radius: 16px !important;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px 16px 0 0 !important;
+
+      ::ng-deep .mat-mdc-card-title,
+      ::ng-deep .mat-mdc-card-subtitle {
+        color: white !important;
+      }
+    }
+
+    .back-button {
+      color: white;
+    }
+
+    .header-content {
+      flex: 1;
+    }
+
+    mat-card-content {
+      padding: 2rem !important;
+    }
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .option-desc {
+      font-size: 0.875rem;
+      color: #6B7280;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #E5E7EB;
+
+      button {
+        min-width: 150px;
+        height: 44px;
+        border-radius: 10px;
+      }
+    }
+
+    .info-box {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+      border-radius: 12px;
+      border-left: 4px solid #3B82F6;
+      display: flex;
+      gap: 1rem;
+
+      mat-icon {
+        color: #3B82F6;
+        flex-shrink: 0;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .info-content {
+        flex: 1;
+
+        h4 {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #111827;
+          margin-bottom: 0.75rem;
+        }
+
+        ol {
+          margin: 0;
+          padding-left: 1.25rem;
+
+          li {
+            color: #6B7280;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .submit-container {
+        padding: 0;
+      }
+
+      .button-row {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }

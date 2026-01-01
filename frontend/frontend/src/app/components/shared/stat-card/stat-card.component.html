@@ -1,0 +1,15 @@
+<mat-card class="stat-card" [ngClass]="colorClass">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper">
+          <mat-icon>{{ icon }}</mat-icon>
+        </div>
+        <div class="stat-details">
+          <div class="stat-value">{{ value }}</div>
+          <div class="stat-label">{{ label }}</div>
+          <div class="stat-change" *ngIf="change" [ngClass]="changeClass">
+            <mat-icon>{{ changeIcon }}</mat-icon>
+            <span>{{ change }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>

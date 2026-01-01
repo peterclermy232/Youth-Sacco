@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'accounts',
     'contributions',
     'notifications',
+    'documents',
+    'applications',
 ]
 
 MIDDLEWARE = [
@@ -109,7 +111,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

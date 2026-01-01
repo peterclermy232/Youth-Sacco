@@ -1,4 +1,4 @@
-import { User } from './user.model';
+import { User } from "./user.model";
 
 export interface ContributionType {
   id: number;
@@ -60,4 +60,24 @@ export interface ContributionSummary {
   total_contributions: number;
   active_members: number;
   last_updated: string;
+}
+
+// Chart data models
+export interface ChartData {
+  labels: string[];
+  datasets: ChartDataset[];
+}
+
+export interface ChartDataset {
+  label: string;
+  data: number[];
+  backgroundColor?: string | string[];
+  borderColor?: string | string[];
+  borderWidth?: number;
+}
+
+export interface MonthlyContribution {
+  month: string;
+  amount: number;
+  count: number;
 }

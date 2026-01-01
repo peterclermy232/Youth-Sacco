@@ -1,0 +1,74 @@
+<div class="application-container">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Submit Application</mat-card-title>
+          <mat-card-subtitle>Entry/Exit Application Form</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
+            <!-- Prefilled Information -->
+            <div class="section">
+              <h3>Personal Information (Auto-filled)</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Full Name</label>
+                  <p>{{ currentUser?.first_name }} {{ currentUser?.last_name }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Phone Number</label>
+                  <p>{{ currentUser?.phone_number }}</p>
+                </div>
+                <div class="info-item">
+                  <label>Email</label>
+                  <p>{{ currentUser?.email || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Application Type -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Application Type</mat-label>
+              <mat-select formControlName="application_type" required>
+                <mat-option value="ENTRY">Entry Application</mat-option>
+                <mat-option value="EXIT">Exit Application</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Reason -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Reason</mat-label>
+              <textarea matInput formControlName="reason" rows="4"
+                placeholder="Explain your reason for entry/exit" required></textarea>
+            </mat-form-field>
+
+            <!-- Additional Notes -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Additional Notes (Optional)</mat-label>
+              <textarea matInput formControlName="additional_notes" rows="3"></textarea>
+            </mat-form-field>
+
+            <!-- Supporting Documents -->
+            <div class="section">
+              <h3>Supporting Documents</h3>
+              <app-file-upload
+                label="Upload Document 1 (Optional)"
+                (fileSelected)="onFile1Selected($event)"
+              ></app-file-upload>
+
+              <app-file-upload
+                label="Upload Document 2 (Optional)"
+                (fileSelected)="onFile2Selected($event)"
+              ></app-file-upload>
+            </div>
+
+            <div class="button-row">
+              <button mat-button type="button" (click)="cancel()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
+                {{ submitting ? 'Submitting...' : 'Submit Application' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>

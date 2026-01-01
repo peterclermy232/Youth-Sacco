@@ -1,0 +1,92 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed" [class.mobile]="isMobile">
+  <!-- Logo Section -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <mat-icon class="logo-icon">account_balance</mat-icon>
+      <span class="logo-text" *ngIf="!isCollapsed">SACCO</span>
+    </div>
+  </div>
+
+  <!-- User Profile Section -->
+  <div class="user-profile" *ngIf="currentUser$ | async as user">
+    <div class="avatar">
+      <img *ngIf="user.passport_photo" [src]="user.passport_photo" [alt]="user.first_name">
+      <div *ngIf="!user.passport_photo" class="avatar-placeholder">
+        {{ user.first_name[0] }}{{ user.last_name[0] }}
+      </div>
+    </div>
+    <div class="user-info" *ngIf="!isCollapsed">
+      <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+      <div class="user-role">
+        <span class="role-badge" [class.admin]="user.role === 'ADMIN'">
+          {{ user.role }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" class="menu-item">
+        <!-- Menu item without submenu -->
+        <a
+          *ngIf="!item.submenu"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="menu-link"
+          [matTooltip]="isCollapsed ? item.label : ''"
+          matTooltipPosition="right"
+          (click)="navigate(item.route)"
+        >
+          <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+          <span class="menu-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+          <span class="badge" *ngIf="item.badge && !isCollapsed">{{ item.badge }}</span>
+        </a>
+
+        <!-- Menu item with submenu -->
+        <div *ngIf="item.submenu" class="menu-item-with-submenu">
+          <div
+            class="menu-link"
+            [class.active]="isMenuExpanded(item.label)"
+            (click)="toggleMenu(item.label)"
+            [matTooltip]="isCollapsed ? item.label : ''"
+            matTooltipPosition="right"
+          >
+            <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+            <span class="menu-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+            <mat-icon class="expand-icon" *ngIf="!isCollapsed">
+              {{ isMenuExpanded(item.label) ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+            <span class="badge" *ngIf="item.badge && !isCollapsed">{{ item.badge }}</span>
+          </div>
+
+          <!-- Submenu -->
+          <ul class="submenu" *ngIf="isMenuExpanded(item.label) && !isCollapsed">
+            <li *ngFor="let subItem of item.submenu">
+              <a
+                [routerLink]="subItem.route"
+                routerLinkActive="active"
+                class="submenu-link"
+                (click)="navigate(subItem.route)"
+              >
+                <span class="submenu-label">{{ subItem.label }}</span>
+                <span class="badge" *ngIf="subItem.badge">{{ subItem.badge }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Bottom Section -->
+  <div class="sidebar-footer">
+    <div class="footer-item">
+      <button class="footer-link" (click)="logout()">
+        <mat-icon class="footer-icon">logout</mat-icon>
+        <span *ngIf="!isCollapsed">Logout</span>
+      </button>
+    </div>
+  </div>
+</aside>
