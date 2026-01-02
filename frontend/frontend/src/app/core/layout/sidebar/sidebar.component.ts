@@ -1,11 +1,11 @@
-// frontend/src/app/core/layout/sidebar/sidebar.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+// frontend/src/app/core/layout/sidebar/sidebar.component.ts - UPDATED
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../services/auth.service';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 
 interface MenuItem {
   label: string;
@@ -28,14 +28,14 @@ interface SubMenuItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   @Input() isCollapsed = false;
   @Input() isMobile = false;
   @Output() toggleSidebar = new EventEmitter<void>();
 
-
   isAdmin = false;
   expandedMenus: Set<string> = new Set();
+  currentUser$!: Observable<any>;
 
   memberMenuItems: MenuItem[] = [
     {
@@ -70,8 +70,7 @@ export class SidebarComponent {
     {
       label: 'Applications',
       icon: 'assignment',
-      route: '/member/applications',
-      badge: '2'
+      route: '/member/applications'
     },
     {
       label: 'Settings',
@@ -89,30 +88,26 @@ export class SidebarComponent {
     {
       label: 'Members',
       icon: 'group',
-      route: '/admin/members',
-      badge: '127'
+      route: '/admin/members'
     },
     {
       label: 'Contributions',
       icon: 'account_balance_wallet',
       route: '/admin/contributions',
       submenu: [
-        { label: 'Pending Verification', route: '/admin/contributions/pending', badge: '5' },
-        { label: 'All Contributions', route: '/admin/contributions/all' },
-        { label: 'Reports', route: '/admin/contributions/reports' }
+        { label: 'Pending Verification', route: '/admin/contributions/pending' },
+        { label: 'All Contributions', route: '/admin/contributions/all' }
       ]
     },
     {
       label: 'Documents',
       icon: 'folder',
-      route: '/admin/documents',
-      badge: '3'
+      route: '/admin/documents'
     },
     {
       label: 'Applications',
       icon: 'assignment',
-      route: '/admin/applications',
-      badge: '2'
+      route: '/admin/applications'
     },
     {
       label: 'Reports',
@@ -120,7 +115,6 @@ export class SidebarComponent {
       route: '/admin/reports',
       submenu: [
         { label: 'Financial Reports', route: '/admin/reports/financial' },
-        { label: 'Compensatory Reports', route: '/admin/reports/compensatory' },
         { label: 'Activity Logs', route: '/admin/reports/activity' }
       ]
     },
@@ -130,13 +124,11 @@ export class SidebarComponent {
       route: '/admin/settings'
     }
   ];
-  currentUser$!: Observable<any>;
+
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.currentUser$ = this.authService.currentUser;
@@ -145,6 +137,7 @@ export class SidebarComponent {
       this.isAdmin = user?.role === 'ADMIN';
     });
   }
+
   get menuItems(): MenuItem[] {
     return this.isAdmin ? this.adminMenuItems : this.memberMenuItems;
   }

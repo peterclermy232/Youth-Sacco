@@ -1,4 +1,4 @@
-// frontend/src/app/app.routes.ts
+// frontend/src/app/app.routes.ts - UPDATED WITH MEMBERS
 import { Routes } from '@angular/router';
 import { authGuard, memberGuard, adminGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './core/layout/main-layout/main-layout.component';
@@ -114,13 +114,24 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/admin-dashboard/admin-dashboard.component')
           .then(m => m.AdminDashboardComponent)
       },
-      // {
-      //   path: 'members',
-      //   loadComponent: () => import('./features/admin/members-list/members-list.component')
-      //     .then(m => m.MembersListComponent)
-      // },
+      // NEW MEMBERS ROUTE
+      {
+        path: 'members',
+        loadComponent: () => import('./features/admin/members-list/members-list.component')
+          .then(m => m.MembersListComponent)
+      },
+      {
+        path: 'members/:id',
+        loadComponent: () => import('./features/admin/member-details/member-details.component')
+          .then(m => m.MemberDetailsComponent)
+      },
       {
         path: 'contributions/pending',
+        loadComponent: () => import('./features/contributions/verify-contribution/verify-contribution.component')
+          .then(m => m.VerifyContributionComponent)
+      },
+      {
+        path: 'contributions/:id/verify',
         loadComponent: () => import('./features/contributions/verify-contribution/verify-contribution.component')
           .then(m => m.VerifyContributionComponent)
       },
@@ -177,5 +188,3 @@ export const routes: Routes = [
     redirectTo: '/login'
   }
 ];
-
-

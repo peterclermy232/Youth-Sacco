@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { User, LoginRequest, RegisterRequest, AuthResponse } from '../models/user.model';
 import { environment } from '../../environments/environment';
-
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +43,10 @@ export class AuthService {
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
         this.currentUserSubject.next(response.user);
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        return throwError(() => error);
       })
     );
   }
@@ -55,6 +58,10 @@ export class AuthService {
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
         this.currentUserSubject.next(response.user);
+      }),
+      catchError(error => {
+        console.error('Registration error:', error);
+        return throwError(() => error);
       })
     );
   }
@@ -77,11 +84,20 @@ export class AuthService {
 
   refreshToken(): Observable<{ access: string }> {
     const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => new Error('No refresh token available'));
+    }
+
     return this.http.post<{ access: string }>(`${this.apiUrl}/token/refresh/`, {
       refresh: refreshToken
     }).pipe(
       tap(response => {
         localStorage.setItem('access_token', response.access);
+      }),
+      catchError(error => {
+        this.logout();
+        return throwError(() => error);
       })
     );
   }

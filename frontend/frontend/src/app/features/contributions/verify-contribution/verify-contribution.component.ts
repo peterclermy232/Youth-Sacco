@@ -1,3 +1,4 @@
+// frontend/src/app/features/contributions/verify-contribution/verify-contribution.component.ts - FIXED
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,8 +14,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Contribution } from '../../../models/contribution.model';
 import { ContributionService } from '../../../services/contribution.service';
-
-
 
 @Component({
   selector: 'app-verify-contribution',
@@ -34,10 +33,10 @@ import { ContributionService } from '../../../services/contribution.service';
     MatDividerModule
   ],
   templateUrl: './verify-contribution.component.html',
-  styleUrl: './verify-contribution.component.scss'
+  styleUrls: ['./verify-contribution.component.scss']
 })
-export class VerifyContributionComponent {
- contribution: Contribution | null = null;
+export class VerifyContributionComponent implements OnInit {
+  contribution: Contribution | null = null;
   verificationForm: FormGroup;
   loading = false;
   submitting = false;
@@ -69,7 +68,12 @@ export class VerifyContributionComponent {
 
   ngOnInit(): void {
     this.contributionId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadContribution();
+    if (this.contributionId) {
+      this.loadContribution();
+    } else {
+      this.snackBar.open('Invalid contribution ID', 'Close', { duration: 3000 });
+      this.router.navigate(['/admin']);
+    }
   }
 
   loadContribution(): void {
@@ -88,6 +92,7 @@ export class VerifyContributionComponent {
       },
       error: (error) => {
         this.loading = false;
+        console.error('Error loading contribution:', error);
         this.snackBar.open('Failed to load contribution', 'Close', { duration: 3000 });
         this.router.navigate(['/admin']);
       }
@@ -96,6 +101,9 @@ export class VerifyContributionComponent {
 
   onSubmit(): void {
     if (this.verificationForm.invalid) {
+      Object.keys(this.verificationForm.controls).forEach(key => {
+        this.verificationForm.get(key)?.markAsTouched();
+      });
       return;
     }
 
@@ -104,7 +112,7 @@ export class VerifyContributionComponent {
       this.contributionId,
       this.verificationForm.value
     ).subscribe({
-      next: (result) => {
+      next: () => {
         const action = this.verificationForm.value.status === 'VERIFIED' ? 'verified' : 'rejected';
         this.snackBar.open(`Contribution ${action} successfully!`, 'Close', {
           duration: 3000
@@ -113,6 +121,7 @@ export class VerifyContributionComponent {
       },
       error: (error) => {
         this.submitting = false;
+        console.error('Error verifying contribution:', error);
         this.snackBar.open('Failed to process contribution', 'Close', { duration: 3000 });
       }
     });
@@ -122,4 +131,3 @@ export class VerifyContributionComponent {
     this.router.navigate(['/admin']);
   }
 }
-
