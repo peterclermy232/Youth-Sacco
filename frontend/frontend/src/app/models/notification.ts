@@ -9,6 +9,7 @@ export interface Notification {
   action_url?: string;
   created_at: string;
   read_at?: string;
+  read: boolean;
 }
 
 export interface NotificationPreferences {

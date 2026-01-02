@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { Observable } from 'rxjs/internal/Observable';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { Observable } from 'rxjs/internal/Observable';
     MatIconModule,
     MatButtonModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDividerModule
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']

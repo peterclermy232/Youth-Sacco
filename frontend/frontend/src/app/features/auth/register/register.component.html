@@ -144,8 +144,10 @@
                 <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
                 <span>Creating Account...</span>
               } @else {
-                <span>Create Account</span>
+                <ng-container>
+                   <span>Create Account</span>
                 <mat-icon>arrow_forward</mat-icon>
+                </ng-container>
               }
             </button>
           </form>

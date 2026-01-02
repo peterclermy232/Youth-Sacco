@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { ProfileService } from '../../../services/profile.service';
-import { UserProfile } from '../../../models/user.model';
+import { UserProfile, SpouseDetails, Child } from '../../../models/user.model';
 import { LoadingSpinnerComponent } from '../../../components/shared/loading-spinner/loading-spinner.component';
 import { StatusBadgeComponent } from '../../../components/shared/status-badge/status-badge.component';
 
@@ -31,8 +31,13 @@ import { StatusBadgeComponent } from '../../../components/shared/status-badge/st
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  profile: UserProfile | null = null;
-  loading = true;
+  profile = signal<UserProfile | null>(null);
+  loading = signal(true);
+
+  // Computed signals for template access
+  user = computed(() => this.profile());
+  spouse = computed(() => this.profile()?.spouse_details || null);
+  children = computed(() => this.profile()?.children || []);
 
   constructor(private profileService: ProfileService) {}
 
@@ -41,16 +46,21 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadProfile(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.profileService.getProfile().subscribe({
       next: (profile) => {
-        this.profile = profile;
-        this.loading = false;
+        this.profile.set(profile);
+        this.loading.set(false);
       },
       error: (error) => {
         console.error('Error loading profile:', error);
-        this.loading = false;
+        this.loading.set(false);
       }
     });
+  }
+
+  changePhoto(): void {
+    // Implement photo change logic
+    console.log('Change photo clicked');
   }
 }

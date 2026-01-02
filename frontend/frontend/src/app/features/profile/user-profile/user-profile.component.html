@@ -4,7 +4,7 @@
         <div class="profile-main">
           <div class="profile-photo-wrapper">
             <img
-              [src]="user()?.profilePhoto || 'assets/default-avatar.png'"
+              [src]="user()?.passport_photo || 'assets/default-avatar.png'"
               alt="Profile"
               class="profile-photo"
             />
@@ -13,7 +13,7 @@
             </button>
           </div>
           <div class="profile-info">
-            <h1>{{ user()?.fullName }}</h1>
+            <h1>{{ user()?.full_name }}</h1>
             <p class="designation">{{ user()?.designation || 'Member' }}</p>
             <div class="profile-badges">
               <span class="badge role-badge">{{ user()?.role }}</span>
@@ -50,12 +50,12 @@
             </div>
             <div class="info-item">
               <span class="label">Marital Status:</span>
-              <span class="value">{{ user()?.maritalStatus }}</span>
+              <span class="value">{{ user()?.marital_status }}</span>
             </div>
-            @if (user()?.maritalStatus === 'married') {
+            @if (user()?.marital_status === 'married') {
               <div class="info-item">
                 <span class="label">Number of Kids:</span>
-                <span class="value">{{ user()?.numberOfKids || 0 }}</span>
+                <span class="value">{{ user()?.number_of_kids || 0 }}</span>
               </div>
             }
             <div class="info-item">
@@ -64,12 +64,12 @@
             </div>
             <div class="info-item">
               <span class="label">Salary Range:</span>
-              <span class="value">{{ user()?.salaryRange }}</span>
+              <span class="value">{{ user()?.salary_range }}</span>
             </div>
           </div>
         </div>
 
-        @if (user()?.maritalStatus === 'married') {
+        @if (user()?.marital_status === 'married') {
           <div class="profile-section">
             <div class="section-header">
               <h2>Spouse Details</h2>
@@ -81,7 +81,7 @@
               <div class="info-grid">
                 <div class="info-item">
                   <span class="label">Name:</span>
-                  <span class="value">{{ spouse()?.fullName }}</span>
+                  <span class="value">{{ spouse()?.full_name }}</span>
                 </div>
                 <div class="info-item">
                   <span class="label">Age:</span>
@@ -115,7 +115,7 @@
                 @for (child of children(); track child.id) {
                   <div class="child-card">
                     <div class="child-info">
-                      <h4>{{ child.fullName }}</h4>
+                      <h4>{{ child.full_name }}</h4>
                       <span class="child-age">Age: {{ child.age }} years</span>
                     </div>
                     <span class="child-cert">✓ Birth Certificate</span>

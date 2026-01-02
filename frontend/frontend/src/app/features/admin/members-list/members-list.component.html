@@ -1,5 +1,6 @@
 <!-- frontend/src/app/features/admin/members-list/members-list.component.html -->
 <div class="members-container">
+
   <!-- Page Header -->
   <div class="page-header">
     <div class="header-left">
@@ -7,7 +8,7 @@
       <p>Manage all SACCO members and their information</p>
     </div>
     <div class="header-actions">
-      <button mat-raised-button color="primary" class="export-btn" (click)="exportMembers()">
+      <button mat-raised-button color="primary" (click)="exportMembers()">
         <mat-icon>download</mat-icon>
         Export
       </button>
@@ -21,228 +22,127 @@
   <!-- Stats Cards -->
   <div class="stats-grid">
     <mat-card class="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon blue">
-          <mat-icon>group</mat-icon>
-        </div>
-        <div class="stat-details">
-          <div class="stat-value">{{ totalMembers }}</div>
-          <div class="stat-label">Total Members</div>
-        </div>
-      </div>
+      <div class="stat-value">{{ totalMembers }}</div>
+      <div class="stat-label">Total Members</div>
     </mat-card>
 
     <mat-card class="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon green">
-          <mat-icon>check_circle</mat-icon>
-        </div>
-        <div class="stat-details">
-          <div class="stat-value">{{ (dataSource.data | async)?.filter(m => m.is_active).length || 0 }}</div>
-          <div class="stat-label">Active Members</div>
-        </div>
-      </div>
+      <div class="stat-value">{{ activeMembersCount }}</div>
+      <div class="stat-label">Active Members</div>
     </mat-card>
 
     <mat-card class="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon purple">
-          <mat-icon>admin_panel_settings</mat-icon>
-        </div>
-        <div class="stat-details">
-          <div class="stat-value">{{ (dataSource.data | async)?.filter(m => m.role === 'ADMIN').length || 0 }}</div>
-          <div class="stat-label">Administrators</div>
-        </div>
-      </div>
+      <div class="stat-value">{{ adminMembersCount }}</div>
+      <div class="stat-label">Administrators</div>
     </mat-card>
   </div>
 
-  <!-- Filters Section -->
-  <mat-card class="filters-card">
+  <!-- Filters -->
+  <mat-card>
     <div class="filters-container">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Search members</mat-label>
-        <mat-icon matPrefix>search</mat-icon>
-        <input matInput [formControl]="searchControl" placeholder="Name, phone, or email">
-        @if (searchControl.value) {
-          <button matSuffix mat-icon-button (click)="searchControl.setValue('')">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput [formControl]="searchControl">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline">
         <mat-label>Role</mat-label>
         <mat-select [formControl]="roleFilter">
-          <mat-option value="ALL">All Roles</mat-option>
+          <mat-option value="ALL">All</mat-option>
           <mat-option value="ADMIN">Admin</mat-option>
           <mat-option value="MEMBER">Member</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
         <mat-select [formControl]="statusFilter">
-          <mat-option value="ALL">All Status</mat-option>
+          <mat-option value="ALL">All</mat-option>
           <mat-option value="ACTIVE">Active</mat-option>
           <mat-option value="INACTIVE">Inactive</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-stroked-button (click)="clearFilters()" class="clear-btn">
-        <mat-icon>filter_alt_off</mat-icon>
-        Clear Filters
-      </button>
+      <button mat-stroked-button (click)="clearFilters()">Clear</button>
     </div>
   </mat-card>
 
-  <!-- Loading State -->
+  <!-- Loading -->
   @if (loading) {
     <app-loading-spinner message="Loading members..."></app-loading-spinner>
   }
 
-  <!-- Members Table -->
+  <!-- Table -->
   @if (!loading && dataSource.data.length > 0) {
-    <mat-card class="table-card">
-      <div class="table-container">
-        <table mat-table [dataSource]="dataSource" matSort class="members-table">
-          <!-- Avatar & Name Column -->
-          <ng-container matColumnDef="avatar">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let member">
-              <div class="avatar-cell">
-                @if (member.passport_photo) {
-                  <img [src]="member.passport_photo" [alt]="member.first_name" class="member-avatar">
-                } @else {
-                  <div class="avatar-placeholder">
-                    {{ getInitials(member) }}
-                  </div>
-                }
-              </div>
-            </td>
-          </ng-container>
+    <mat-card>
+      <table mat-table [dataSource]="dataSource" matSort>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-            <td mat-cell *matCellDef="let member">
-              <div class="name-cell">
-                <div class="member-name">{{ member.first_name }} {{ member.last_name }}</div>
-                <div class="member-profession">{{ member.profession || 'N/A' }}</div>
-              </div>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="avatar">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let m">
+            <div class="avatar">{{ getInitials(m) }}</div>
+          </td>
+        </ng-container>
 
-          <!-- Phone Column -->
-          <ng-container matColumnDef="phone">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
-            <td mat-cell *matCellDef="let member">
-              <div class="contact-cell">
-                <mat-icon class="contact-icon">phone</mat-icon>
-                {{ member.phone_number }}
-              </div>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let m">{{ m.first_name }} {{ m.last_name }}</td>
+        </ng-container>
 
-          <!-- Email Column -->
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-            <td mat-cell *matCellDef="let member">
-              <div class="contact-cell">
-                @if (member.email) {
-                  <mat-icon class="contact-icon">email</mat-icon>
-                  {{ member.email }}
-                } @else {
-                  <span class="text-muted">Not provided</span>
-                }
-              </div>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+          <td mat-cell *matCellDef="let m">{{ m.phone_number }}</td>
+        </ng-container>
 
-          <!-- Role Column -->
-          <ng-container matColumnDef="role">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-            <td mat-cell *matCellDef="let member">
-              <mat-chip [class]="member.role === 'ADMIN' ? 'role-admin' : 'role-member'">
-                @if (member.role === 'ADMIN') {
-                  <mat-icon>admin_panel_settings</mat-icon>
-                }
-                {{ member.role }}
-              </mat-chip>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let m">{{ m.email || 'N/A' }}</td>
+        </ng-container>
 
-          <!-- Joined Date Column -->
-          <ng-container matColumnDef="joinedDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Joined Date</th>
-            <td mat-cell *matCellDef="let member">
-              {{ member.date_joined | date:'MMM d, y' }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+          <td mat-cell *matCellDef="let m">{{ m.role }}</td>
+        </ng-container>
 
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-            <td mat-cell *matCellDef="let member">
-              <mat-chip [class]="member.is_active ? 'status-active' : 'status-inactive'">
-                @if (member.is_active) {
-                  <mat-icon>check_circle</mat-icon>
-                  Active
-                } @else {
-                  <mat-icon>cancel</mat-icon>
-                  Inactive
-                }
-              </mat-chip>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="joinedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Joined</th>
+          <td mat-cell *matCellDef="let m">
+            {{ m.date_joined | date:'mediumDate' }}
+          </td>
+        </ng-container>
 
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let member">
-              <button mat-icon-button [matMenuTriggerFor]="menu" class="action-btn">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="viewMemberDetails(member)">
-                  <mat-icon>visibility</mat-icon>
-                  <span>View Details</span>
-                </button>
-                <button mat-menu-item (click)="editMember(member)">
-                  <mat-icon>edit</mat-icon>
-                  <span>Edit</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item (click)="deactivateMember(member)" [disabled]="!member.is_active">
-                  <mat-icon color="warn">block</mat-icon>
-                  <span>Deactivate</span>
-                </button>
-              </mat-menu>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let m">
+            <span [class.active]="m.is_active">
+              {{ m.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
-        </table>
-      </div>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let m">
+            <button mat-icon-button (click)="viewMemberDetails(m)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <mat-paginator
-        [pageSizeOptions]="[10, 25, 50, 100]"
-        [pageSize]="10"
-        showFirstLastButtons>
-      </mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[10,25,50]"></mat-paginator>
     </mat-card>
   }
 
-  <!-- Empty State -->
+  <!-- Empty -->
   @if (!loading && dataSource.data.length === 0) {
     <app-empty-state
       icon="group"
       title="No members found"
-      message="There are no members matching your criteria. Try adjusting your filters."
-      [actionLabel]="searchControl.value || roleFilter.value !== 'ALL' || statusFilter.value !== 'ALL' ? 'Clear Filters' : 'Add First Member'"
-      actionIcon="add"
-      (action)="searchControl.value || roleFilter.value !== 'ALL' || statusFilter.value !== 'ALL' ? clearFilters() : null">
+      message="No members match your filters">
     </app-empty-state>
   }
 </div>

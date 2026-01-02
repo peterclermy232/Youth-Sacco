@@ -40,4 +40,8 @@ export class DocumentListComponent implements OnInit {
   getStatusClass(status: string): string {
     return status?.toLowerCase();
   }
+
+  openDocument(url: string): void {
+    window.open(url, '_blank');
+  }
 }

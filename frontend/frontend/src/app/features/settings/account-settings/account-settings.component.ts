@@ -20,6 +20,20 @@ export class AccountSettingsComponent implements OnInit {
       .subscribe(settings => this.settings = settings || undefined);
   }
 
+  onDarkModeChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.update({ dark_mode: checked });
+  }
+
+  onTwoFactorAuthChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.update({ two_factor_auth: checked });
+  }
+
+  onOfflineCacheChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.update({ offline_cache: checked });
+  }
   update(data: Partial<UserSettings>): void {
     this.settingsService.updateSettings(data).subscribe();
   }

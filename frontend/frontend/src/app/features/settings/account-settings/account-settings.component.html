@@ -5,7 +5,7 @@
     <input
       type="checkbox"
       [checked]="settings.dark_mode"
-      (change)="update({ dark_mode: $event.target.checked })"
+      (change)="onDarkModeChange($event)"
     />
     Enable Dark Mode
   </label>
@@ -14,7 +14,7 @@
     <input
       type="checkbox"
       [checked]="settings.two_factor_auth"
-      (change)="update({ two_factor_auth: $event.target.checked })"
+      (change)="onTwoFactorAuthChange($event)"
     />
     Enable Two-Factor Authentication
   </label>
@@ -23,7 +23,7 @@
     <input
       type="checkbox"
       [checked]="settings.offline_cache"
-      (change)="update({ offline_cache: $event.target.checked })"
+      (change)="onOfflineCacheChange($event)"
     />
     Enable Offline Access
   </label>

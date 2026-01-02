@@ -1,4 +1,3 @@
-// frontend/src/app/app.routes.ts - UPDATED WITH MEMBERS
 import { Routes } from '@angular/router';
 import { authGuard, memberGuard, adminGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './core/layout/main-layout/main-layout.component';
@@ -175,13 +174,11 @@ export const routes: Routes = [
 
   // Shared routes (both member and admin)
   {
-    path: 'notifications',
-    component: MainLayoutComponent,
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/notifications/notification-center/notification-center.component')
-      .then(m => m.NotificationCenterComponent)
-  },
-
+  path: 'notifications',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/notifications/notification-center/notification-center.component')
+        .then(m => m.NotificationCenterComponent)
+},
   // 404
   {
     path: '**',

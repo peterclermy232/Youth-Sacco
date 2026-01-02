@@ -1,0 +1,23 @@
+.beneficiary-form-card {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}

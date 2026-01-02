@@ -30,6 +30,7 @@ export interface SpouseDetails {
   identity_document?: string;
   created_at?: string;
   updated_at?: string;
+  phone: string;
 }
 
 export interface Child {
@@ -40,6 +41,7 @@ export interface Child {
   birth_certificate: string | File;
   created_at?: string;
   updated_at?: string;
+
 }
 
 export interface Beneficiary {
@@ -63,6 +65,8 @@ export interface Beneficiary {
   is_primary: boolean;
   created_at?: string;
   updated_at?: string;
+  date_of_birth?: string;
+  occupation?: string;
 }
 
 export interface UserProfile {
@@ -85,6 +89,10 @@ export interface UserProfile {
   children?: Child[];
   beneficiaries?: Beneficiary[];
   next_of_kin?: NextOfKin;
+  full_name: string;
+  designation: string;
+  status: string;
+  phone: string;
 }
 
 export interface LoginRequest {

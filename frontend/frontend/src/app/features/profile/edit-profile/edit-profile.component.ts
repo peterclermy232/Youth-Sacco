@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserProfile } from '../../../models/user.model';
 import { ProfileService } from '../../../services/profile.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })

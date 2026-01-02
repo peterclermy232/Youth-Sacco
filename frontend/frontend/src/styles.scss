@@ -1,87 +1,36 @@
-$primary: #4F46E5;
-$primary-dark: #4338CA;
-$primary-light: #6366F1;
-$secondary: #10B981;
-$accent: #F59E0B;
-$warn: #EF4444;
-$success: #10B981;
-$info: #3B82F6;
-
-$bg-primary: #F9FAFB;
-$bg-secondary: #FFFFFF;
-$bg-sidebar: #1F2937;
-$bg-sidebar-dark: #111827;
-
-$text-primary: #111827;
-$text-secondary: #6B7280;
-$text-light: #9CA3AF;
-$text-white: #FFFFFF;
-
-$border-color: #E5E7EB;
-$border-radius: 12px;
-$border-radius-lg: 16px;
-
-// Shadows
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-// Spacing
-$spacing-xs: 0.25rem;
-$spacing-sm: 0.5rem;
-$spacing-md: 1rem;
-$spacing-lg: 1.5rem;
-$spacing-xl: 2rem;
-$spacing-2xl: 3rem;
-
-// Typography
-$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-$font-size-xs: 0.75rem;
-$font-size-sm: 0.875rem;
-$font-size-base: 1rem;
-$font-size-lg: 1.125rem;
-$font-size-xl: 1.25rem;
-$font-size-2xl: 1.5rem;
-$font-size-3xl: 1.875rem;
-
-// Breakpoints
-$breakpoint-sm: 576px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-$breakpoint-xl: 1200px;
-$breakpoint-xxl: 1400px;
-
-// Transitions
-$transition-fast: 0.15s ease;
-$transition-base: 0.3s ease;
-$transition-slow: 0.5s ease;
-
-
-// frontend/src/styles.scss - UPDATE
+// frontend/frontend/src/styles.scss - MODERN GREEN THEME (Material 3)
 @use '@angular/material' as mat;
-@import './styles/variables';
 
-// Include Material theme
 @include mat.core();
 
-$sacco-primary: mat.define-palette(mat.$indigo-palette);
-$sacco-accent: mat.define-palette(mat.$green-palette);
-$sacco-warn: mat.define-palette(mat.$red-palette);
+// Modern Green Color Palette
+$primary-green: #10B981;
+$primary-green-dark: #059669;
+$primary-green-light: #34D399;
+$accent-teal: #14B8A6;
 
-$sacco-theme: mat.define-light-theme((
+// Material 3 Theme Definition
+$theme: mat.define-theme((
   color: (
-    primary: $sacco-primary,
-    accent: $sacco-accent,
-    warn: $sacco-warn,
+    theme-type: light,
+    primary: mat.$green-palette,
+    tertiary: mat.$cyan-palette,
   ),
-  typography: mat.define-typography-config(),
-  density: 0,
+  typography: (
+    plain-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    brand-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  ),
+  density: (
+    scale: 0,
+  ),
 ));
 
-@include mat.all-component-themes($sacco-theme);
+// IMPORTANT: M3 themes must be wrapped in a selector
+html {
+  @include mat.all-component-themes($theme);
+}
 
-// Global Styles
+// Global Resets
 * {
   margin: 0;
   padding: 0;
@@ -89,9 +38,9 @@ $sacco-theme: mat.define-light-theme((
 }
 
 body {
-  font-family: $font-family;
-  background-color: $bg-primary;
-  color: $text-primary;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #F0FDF4 0%, #F9FAFB 100%);
+  color: #111827;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -99,9 +48,15 @@ body {
 
 // Material Design Overrides
 .mat-mdc-card {
-  border-radius: $border-radius !important;
-  box-shadow: $shadow-sm !important;
-  border: 1px solid $border-color;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 3px 0 rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid #E5E7EB;
+  background: white !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1) !important;
+  }
 }
 
 .mat-mdc-button,
@@ -110,14 +65,170 @@ body {
   border-radius: 10px !important;
   text-transform: none !important;
   font-weight: 600 !important;
-  letter-spacing: 0 !important;
+  transition: all 0.2s ease !important;
+
+  &.mat-primary {
+    background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%) !important;
+    color: white !important;
+
+    &:hover {
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2) !important;
+      transform: translateY(-2px);
+    }
+  }
 }
 
 .mat-mdc-form-field {
   width: 100%;
 }
 
+// Custom Green Gradients
+.gradient-green {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.gradient-teal {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+}
+
+.gradient-emerald {
+  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+}
+
+// Status Badges - Modern Green Theme
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+
+  &.success,
+  &.verified,
+  &.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  &.pending {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  &.error,
+  &.rejected {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+}
+
+// Modern Card Styles
+.modern-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(16, 185, 129, 0.1);
+  border: 1px solid #E5E7EB;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+  }
+
+  &.green-accent {
+    border-left: 4px solid $primary-green;
+  }
+}
+
+// Glassmorphism Effect
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.1);
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.pulse-green {
+  animation: pulse-green 2s infinite;
+}
+
+// Scrollbar - Green Theme
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0FDF4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $primary-green-light, $primary-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, $primary-green, $primary-green-dark);
+}
+
 // Utility Classes
+.text-green {
+  color: $primary-green !important;
+}
+
+.bg-green {
+  background-color: $primary-green !important;
+}
+
+.border-green {
+  border-color: $primary-green !important;
+}
+
 .full-width {
   width: 100%;
 }
@@ -126,96 +237,25 @@ body {
   text-align: center;
 }
 
-.mt-1 { margin-top: $spacing-sm; }
-.mt-2 { margin-top: $spacing-md; }
-.mt-3 { margin-top: $spacing-lg; }
-.mt-4 { margin-top: $spacing-xl; }
+// Spacing Utilities
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
 
-.mb-1 { margin-bottom: $spacing-sm; }
-.mb-2 { margin-bottom: $spacing-md; }
-.mb-3 { margin-bottom: $spacing-lg; }
-.mb-4 { margin-bottom: $spacing-xl; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
 
-.p-1 { padding: $spacing-sm; }
-.p-2 { padding: $spacing-md; }
-.p-3 { padding: $spacing-lg; }
-.p-4 { padding: $spacing-xl; }
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
 
-// Animations
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-// Scrollbar Styling
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: $bg-primary;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
-}
-
-// Card styles
-.stat-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: $border-radius;
-  box-shadow: $shadow-sm;
-  transition: all $transition-base;
-
-  &:hover {
-    box-shadow: $shadow-md;
-    transform: translateY(-2px);
-  }
-}
-
-// Status badges
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: $font-size-sm;
-  font-weight: 600;
-
-  &.success {
-    background: rgba(16, 185, 129, 0.1);
-    color: $success;
-  }
-
-  &.warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: $accent;
-  }
-
-  &.danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: $warn;
-  }
-
-  &.info {
-    background: rgba(59, 130, 246, 0.1);
-    color: $info;
+// Responsive
+@media (max-width: 768px) {
+  .modern-card {
+    padding: 1rem;
   }
 }

@@ -12,7 +12,7 @@
     </span>
 
     <div class="actions">
-      <button class="view" (click)="window.open(doc.file, '_blank')">
+      <button class="view" (click)="openDocument(doc.file)">
         View
       </button>
       <button class="delete" (click)="deleteDocument(doc.id)">

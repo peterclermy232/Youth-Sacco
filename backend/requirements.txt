@@ -16,3 +16,5 @@ responses==0.25.8
 schema==0.7.8
 sqlparse==0.5.5
 urllib3==2.6.2
+Pillow>=10.0.0
+

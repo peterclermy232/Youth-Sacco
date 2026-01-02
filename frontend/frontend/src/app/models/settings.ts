@@ -15,6 +15,9 @@ export interface UserSettings {
   biometric_enabled: boolean;
   created_at?: string;
   updated_at?: string;
+  dark_mode: boolean;
+  two_factor_auth: boolean;
+  offline_cache: boolean;
 }
 
 export interface IntegratedFirm {

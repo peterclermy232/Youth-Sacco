@@ -1,1 +1,54 @@
-<p>add-beneficiary works!</p>
+<mat-card class="beneficiary-form-card">
+  <h2>Add Beneficiary</h2>
+  <p class="subtitle">Enter beneficiary details below</p>
+
+  <form [formGroup]="beneficiaryForm" class="form-grid">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="full_name">
+      <mat-error *ngIf="beneficiaryForm.get('full_name')?.invalid">
+        Full name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Relationship</mat-label>
+      <mat-select formControlName="relationship">
+        <mat-option value="Spouse">Spouse</mat-option>
+        <mat-option value="Child">Child</mat-option>
+        <mat-option value="Parent">Parent</mat-option>
+        <mat-option value="Sibling">Sibling</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput type="date" formControlName="date_of_birth">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phone_number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Occupation</mat-label>
+      <input matInput formControlName="occupation">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Share Percentage</mat-label>
+      <input matInput type="number" formControlName="percentage_share">
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+      <button mat-raised-button color="primary" type="button" (click)="submit()">
+        Add Beneficiary
+      </button>
+    </div>
+
+  </form>
+</mat-card>

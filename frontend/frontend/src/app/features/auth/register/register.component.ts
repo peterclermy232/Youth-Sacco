@@ -28,7 +28,7 @@ import { AuthService } from '../../../services/auth.service';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatIconModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
