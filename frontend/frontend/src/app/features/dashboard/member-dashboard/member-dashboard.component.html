@@ -1,4 +1,5 @@
-<div class="member-dashboard-wrapper">
+<!-- frontend/src/app/features/dashboard/member-dashboard/member-dashboard.component.html -->
+<div class="dashboard-wrapper">
   <!-- Top Navigation -->
   <nav class="top-navbar">
     <div class="navbar-content">
@@ -10,8 +11,8 @@
       </div>
 
       <div class="navbar-right">
-        <button mat-icon-button class="notification-button">
-          <mat-icon>notifications</mat-icon>
+        <button mat-icon-button class="notification-button" routerLink="/notifications">
+          <mat-icon matBadge="3" matBadgeColor="warn">notifications</mat-icon>
         </button>
 
         <div class="user-menu">
@@ -25,9 +26,9 @@
           <mat-menu #userMenu="matMenu">
             <button mat-menu-item routerLink="/member/profile">
               <mat-icon>person</mat-icon>
-              <span>Profile</span>
+              <span>My Profile</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item routerLink="/member/settings">
               <mat-icon>settings</mat-icon>
               <span>Settings</span>
             </button>
@@ -49,26 +50,112 @@
       <div class="welcome-section">
         <div class="welcome-text">
           <h1>Welcome back, {{ currentUser?.first_name }}! 👋</h1>
-          <p>Here's your financial overview and recent activity</p>
+          <p>Here's your financial overview for today</p>
         </div>
-        <button mat-raised-button color="primary" class="primary-action" routerLink="/member/submit-contribution">
+        <button mat-raised-button color="primary" class="primary-action" (click)="quickDeposit()">
           <mat-icon>add_circle</mat-icon>
-          Submit Contribution
+          Quick Deposit
         </button>
       </div>
 
-      <!-- Balance Cards -->
-      <div class="balance-section">
-        <h2 class="section-title">Your Balances</h2>
+      <!-- Statistics Cards -->
+      <div class="stats-grid">
+        <mat-card class="stat-card blue">
+          <div class="stat-icon-wrapper">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+          <div class="stat-details">
+            <div class="stat-label">Monthly Deposits</div>
+            <div class="stat-value">KES {{ monthlyDeposit | number:'1.2-2' }}</div>
+            <div class="stat-change positive">
+              <mat-icon>arrow_upward</mat-icon>
+              <span>+12.5% from last month</span>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="stat-card green">
+          <div class="stat-icon-wrapper">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </div>
+          <div class="stat-details">
+            <div class="stat-label">Total Contributions</div>
+            <div class="stat-value">KES {{ totalContributions | number:'1.2-2' }}</div>
+            <div class="stat-meta">Across all accounts</div>
+          </div>
+        </mat-card>
+
+        <mat-card class="stat-card purple">
+          <div class="stat-icon-wrapper">
+            <mat-icon>savings</mat-icon>
+          </div>
+          <div class="stat-details">
+            <div class="stat-label">Interest Earned</div>
+            <div class="stat-value">KES {{ interestEarned | number:'1.2-2' }}</div>
+            <div class="stat-meta">3% annual rate</div>
+          </div>
+        </mat-card>
+
+        <mat-card class="stat-card orange">
+          <div class="stat-icon-wrapper">
+            <mat-icon>verified</mat-icon>
+          </div>
+          <div class="stat-details">
+            <div class="stat-label">Account Status</div>
+            <div class="stat-value">{{ accountStatus }}</div>
+            <div class="stat-meta">All systems operational</div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- Savings Goal Progress -->
+      <mat-card class="savings-goal-card">
+        <div class="goal-header">
+          <div>
+            <h3>Savings Goal Progress</h3>
+            <p>Target: KES 100,000</p>
+          </div>
+          <div class="goal-percentage">{{ savingsProgress | number:'1.0-0' }}%</div>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="savingsProgress" color="primary"></mat-progress-bar>
+        <div class="goal-footer">
+          <span>KES {{ totalContributions | number:'1.0-0' }}</span>
+          <span>KES 100,000</span>
+        </div>
+      </mat-card>
+
+      <!-- Account Balances -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2>Account Balances</h2>
+          <button mat-button color="primary" routerLink="/member/contributions/history">
+            View All
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+
         <div class="balance-grid">
           @for (balance of balances; track balance.contribution_type) {
             <mat-card class="balance-card">
               <div class="balance-header">
-                <div class="balance-icon-wrapper">
-                  <mat-icon>account_balance_wallet</mat-icon>
+                <div class="balance-icon">
+                  <mat-icon>account_balance</mat-icon>
                 </div>
-                <mat-chip class="balance-type">{{ balance.contribution_type }}</mat-chip>
+                <mat-menu #balanceMenu="matMenu">
+                  <button mat-menu-item routerLink="/member/contributions/submit">
+                    <mat-icon>add</mat-icon>
+                    <span>Deposit</span>
+                  </button>
+                  <button mat-menu-item>
+                    <mat-icon>history</mat-icon>
+                    <span>View History</span>
+                  </button>
+                </mat-menu>
+                <button mat-icon-button [matMenuTriggerFor]="balanceMenu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
               </div>
+              <div class="balance-type">{{ balance.contribution_type }}</div>
               <div class="balance-amount">
                 <span class="currency">KES</span>
                 <span class="amount">{{ balance.total_balance | number:'1.2-2' }}</span>
@@ -76,43 +163,36 @@
               @if (balance.last_contribution_date) {
                 <div class="balance-footer">
                   <mat-icon>schedule</mat-icon>
-                  <span>Last contribution: {{ balance.last_contribution_date | date:'MMM d, y' }}</span>
+                  <span>Last: {{ balance.last_contribution_date | date:'MMM d' }}</span>
                 </div>
               }
             </mat-card>
           } @empty {
-            <mat-card class="empty-balance-card">
-              <div class="empty-content">
-                <mat-icon>info</mat-icon>
-                <p>No balances yet. Start contributing to build your savings!</p>
-              </div>
-            </mat-card>
+            <div class="empty-state-card">
+              <mat-icon>info</mat-icon>
+              <p>No balances yet. Start contributing to build your savings!</p>
+              <button mat-raised-button color="primary" (click)="quickDeposit()">
+                Make First Deposit
+              </button>
+            </div>
           }
         </div>
       </div>
 
       <!-- Quick Actions -->
-      <div class="quick-actions-section">
-        <h2 class="section-title">Quick Actions</h2>
-        <div class="actions-grid">
-          <mat-card class="action-card" routerLink="/member/submit-contribution">
-            <div class="action-icon blue">
-              <mat-icon>add_circle</mat-icon>
-            </div>
-            <div class="action-content">
-              <h3>New Contribution</h3>
-              <p>Submit M-Pesa transaction</p>
-            </div>
-            <mat-icon class="chevron">chevron_right</mat-icon>
-          </mat-card>
+      <div class="section-container">
+        <div class="section-header">
+          <h2>Quick Actions</h2>
+        </div>
 
-          <mat-card class="action-card" routerLink="/member/contributions">
-            <div class="action-icon purple">
-              <mat-icon>history</mat-icon>
+        <div class="quick-actions-grid">
+          <mat-card class="action-card" routerLink="/member/contributions/submit">
+            <div class="action-icon blue">
+              <mat-icon>payment</mat-icon>
             </div>
             <div class="action-content">
-              <h3>View History</h3>
-              <p>All your contributions</p>
+              <h3>Deposit Funds</h3>
+              <p>M-Pesa or Bank Transfer</p>
             </div>
             <mat-icon class="chevron">chevron_right</mat-icon>
           </mat-card>
@@ -122,53 +202,70 @@
               <mat-icon>person</mat-icon>
             </div>
             <div class="action-content">
-              <h3>My Profile</h3>
-              <p>Manage your details</p>
+              <h3>Update Profile</h3>
+              <p>Manage your information</p>
+            </div>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/member/beneficiaries">
+            <div class="action-icon purple">
+              <mat-icon>group</mat-icon>
+            </div>
+            <div class="action-content">
+              <h3>Beneficiaries</h3>
+              <p>Manage beneficiaries</p>
+            </div>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </mat-card>
+
+          <mat-card class="action-card" routerLink="/member/documents">
+            <div class="action-icon orange">
+              <mat-icon>folder</mat-icon>
+            </div>
+            <div class="action-content">
+              <h3>Documents</h3>
+              <p>Upload & manage docs</p>
             </div>
             <mat-icon class="chevron">chevron_right</mat-icon>
           </mat-card>
         </div>
       </div>
 
-      <!-- Recent Contributions -->
-      <div class="recent-section">
+      <!-- Recent Activity -->
+      <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Recent Contributions</h2>
-          <button mat-button color="primary" routerLink="/member/contributions" class="view-all-button">
+          <h2>Recent Activity</h2>
+          <button mat-button color="primary" routerLink="/member/contributions/history">
             View All
-            <mat-icon>arrow_forward</mat-icon>
           </button>
         </div>
 
         @if (recentContributions.length > 0) {
-          <mat-card class="contributions-card">
-            <div class="contributions-list">
+          <mat-card class="activity-card">
+            <div class="activity-list">
               @for (contribution of recentContributions; track contribution.id) {
-                <div class="contribution-item">
-                  <div class="contribution-left">
-                    <div class="contribution-icon-wrapper" [class.verified]="contribution.status === 'VERIFIED'"
-                         [class.pending]="contribution.status === 'PENDING'"
-                         [class.rejected]="contribution.status === 'REJECTED'">
-                      <mat-icon>
-                        @if (contribution.status === 'VERIFIED') {
-                          check_circle
-                        } @else if (contribution.status === 'PENDING') {
-                          schedule
-                        } @else {
-                          cancel
-                        }
-                      </mat-icon>
-                    </div>
-                    <div class="contribution-details">
-                      <div class="contribution-title">{{ contribution.contribution_type_name }}</div>
-                      <div class="contribution-date">{{ contribution.submitted_at | date:'MMM d, y • h:mm a' }}</div>
-                    </div>
+                <div class="activity-item">
+                  <div class="activity-icon" [class]="contribution.status.toLowerCase()">
+                    <mat-icon>
+                      @if (contribution.status === 'VERIFIED') {
+                        check_circle
+                      } @else if (contribution.status === 'PENDING') {
+                        schedule
+                      } @else {
+                        cancel
+                      }
+                    </mat-icon>
                   </div>
-                  <div class="contribution-right">
-                    <div class="contribution-amount">KES {{ contribution.amount | number:'1.2-2' }}</div>
-                    <mat-chip [class]="'status-' + contribution.status.toLowerCase()">
+                  <div class="activity-details">
+                    <div class="activity-title">{{ contribution.contribution_type_name }} Contribution</div>
+                    <div class="activity-date">{{ contribution.submitted_at | date:'MMM d, y • h:mm a' }}</div>
+                  </div>
+                  <div class="activity-amount">
+                    <div class="amount">KES {{ contribution.amount | number:'1.2-2' }}</div>
+                    <span class="status-chip" [class]="contribution.status.toLowerCase()">
                       {{ contribution.status }}
-                    </mat-chip>
+                    </span>
                   </div>
                 </div>
                 @if (!$last) {
@@ -178,18 +275,10 @@
             </div>
           </mat-card>
         } @else {
-          <mat-card class="empty-contributions-card">
-            <div class="empty-state">
-              <div class="empty-icon">
-                <mat-icon>receipt_long</mat-icon>
-              </div>
-              <h3>No contributions yet</h3>
-              <p>Start building your savings by making your first contribution</p>
-              <button mat-raised-button color="primary" routerLink="/member/submit-contribution">
-                <mat-icon>add</mat-icon>
-                Submit First Contribution
-              </button>
-            </div>
+          <mat-card class="empty-activity-card">
+            <mat-icon>receipt_long</mat-icon>
+            <h3>No recent activity</h3>
+            <p>Your contribution history will appear here</p>
           </mat-card>
         }
       </div>

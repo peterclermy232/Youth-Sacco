@@ -1,18 +1,18 @@
-// frontend/src/app/features/dashboard/member-dashboard/member-dashboard.component.ts - FIXED
+// frontend/src/app/features/dashboard/member-dashboard/member-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../../services/auth.service';
 import { ContributionService } from '../../../services/contribution.service';
 import { User } from '../../../models/user.model';
 import { Balance, Contribution } from '../../../models/contribution.model';
+import { MatChip } from '@angular/material/chips';
 
 @Component({
   selector: 'app-member-dashboard',
@@ -23,10 +23,11 @@ import { Balance, Contribution } from '../../../models/contribution.model';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule,
-    MatChipsModule,
+    MatMenuModule,
     MatDividerModule,
-    MatMenuModule
+    MatProgressBarModule,
+    MatChip
+
   ],
   templateUrl: './member-dashboard.component.html',
   styleUrls: ['./member-dashboard.component.scss']
@@ -35,9 +36,14 @@ export class MemberDashboardComponent implements OnInit {
   currentUser: User | null = null;
   balances: Balance[] = [];
   recentContributions: Contribution[] = [];
-  displayedColumns: string[] = ['date', 'type', 'amount', 'status'];
   loading = true;
-  error: string | null = null;
+
+  // Stats
+  monthlyDeposit = 0;
+  totalContributions = 0;
+  interestEarned = 0;
+  accountStatus = 'Active';
+  savingsProgress = 0;
 
   constructor(
     private authService: AuthService,
@@ -52,11 +58,6 @@ export class MemberDashboardComponent implements OnInit {
         if (user) {
           this.loadDashboardData();
         }
-      },
-      error: (err) => {
-        console.error('Error loading user:', err);
-        this.error = 'Failed to load user information';
-        this.loading = false;
       }
     });
   }
@@ -68,6 +69,7 @@ export class MemberDashboardComponent implements OnInit {
       this.loadRecentContributions()
     ]).finally(() => {
       this.loading = false;
+      this.calculateStats();
     });
   }
 
@@ -78,8 +80,7 @@ export class MemberDashboardComponent implements OnInit {
           this.balances = balances;
           resolve();
         },
-        error: (error) => {
-          console.error('Error loading balances:', error);
+        error: () => {
           this.balances = [];
           resolve();
         }
@@ -94,8 +95,7 @@ export class MemberDashboardComponent implements OnInit {
           this.recentContributions = contributions.slice(0, 5);
           resolve();
         },
-        error: (error) => {
-          console.error('Error loading contributions:', error);
+        error: () => {
           this.recentContributions = [];
           resolve();
         }
@@ -103,16 +103,33 @@ export class MemberDashboardComponent implements OnInit {
     });
   }
 
+  private calculateStats(): void {
+    // Calculate total contributions
+    this.totalContributions = this.balances.reduce((sum, b) =>
+      sum + parseFloat(b.total_balance), 0
+    );
+
+    // Calculate this month's contributions
+    const thisMonth = new Date().getMonth();
+    this.monthlyDeposit = this.recentContributions
+      .filter(c => {
+        const contribMonth = new Date(c.submitted_at).getMonth();
+        return contribMonth === thisMonth && c.status === 'VERIFIED';
+      })
+      .reduce((sum, c) => sum + parseFloat(c.amount), 0);
+
+    // Mock interest calculation (3% of total)
+    this.interestEarned = this.totalContributions * 0.03;
+
+    // Calculate savings progress (towards 100K goal)
+    this.savingsProgress = Math.min((this.totalContributions / 100000) * 100, 100);
+  }
+
   logout(): void {
     this.authService.logout();
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'VERIFIED': return 'primary';
-      case 'PENDING': return 'accent';
-      case 'REJECTED': return 'warn';
-      default: return '';
-    }
+  quickDeposit(): void {
+    this.router.navigate(['/member/contributions/submit']);
   }
 }
